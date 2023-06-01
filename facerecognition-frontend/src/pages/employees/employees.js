@@ -26,6 +26,12 @@ function Employees() {
 
     const [modalApagar, setModalApagar] = useState(false);
 
+    const [modalCriado, setModalCriado] = useState(false);
+
+    const [modalEditado, setModalEditado] = useState(false);
+
+    const [modalApagado, setModalApagado] = useState(false);
+
     const [empregadoSelecionado, setEmpregadoSelecionado] = useState(
         {
             id: '',
@@ -59,6 +65,18 @@ function Employees() {
         setModalApagar(!modalApagar);
     }
 
+    const abrirFecharModalCriado = () => {
+        setModalCriado(!modalCriado);
+    }
+
+    const abrirFecharModalEditado = () => {
+        setModalEditado(!modalEditado);
+    }
+
+    const abrirFecharModalApagado = () => {
+        setModalApagado(!modalApagado);
+    }
+
     const handleChange = e => {
         const { name, value } = e.target;
         setEmpregadoSelecionado({
@@ -83,6 +101,7 @@ function Employees() {
                 setData(data.concat(response.data));
                 setUpdateData(true);
                 abrirFecharModalAdicionar();
+                abrirFecharModalCriado();
             }).catch(error => {
                 console.log(error);
             })
@@ -107,6 +126,7 @@ function Employees() {
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
+                abrirFecharModalEditado();
             }).catch(error => {
                 console.log(error);
             })
@@ -118,6 +138,7 @@ function Employees() {
                 setData(data.filter(empregado => empregado.id !== response.data));
                 setUpdateData(true);
                 abrirFecharModalApagar();
+                abrirFecharModalApagado();
             }).catch(error => {
                 console.log(error);
             })
@@ -287,6 +308,36 @@ function Employees() {
                 <ModalFooter>
                     <button className="btn btn-danger" onClick={() => pedidoDelete()}>Sim</button>
                     <button className="btn btn-secondary" onClick={() => abrirFecharModalApagar()}>Não</button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalCriado}>
+                <ModalHeader>Funcionário Adicionado</ModalHeader>
+                <ModalBody>
+                    <div>Os dados do funcionário que introduziu foram adicionados com sucesso!</div>
+                </ModalBody>
+                <ModalFooter>
+                    <button className="btn btn-primary" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalEditado}>
+                <ModalHeader>Funcionário Editado</ModalHeader>
+                <ModalBody>
+                    <div>Os dados do funcionário foram editados com sucesso!</div>
+                </ModalBody>
+                <ModalFooter>
+                    <button className="btn btn-primary" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalApagado}>
+                <ModalHeader>Funcionário Apagado</ModalHeader>
+                <ModalBody>
+                    <div>O funcionário selecionado foi apagado com sucesso!</div>
+                </ModalBody>
+                <ModalFooter>
+                    <button className="btn btn-primary" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
