@@ -1,0 +1,65 @@
+.btn {
+  background: #6495ED;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: 0.3s all ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: whitesmoke;
+}
+
+.btn:hover {
+  background: whitesmoke;
+  color: #6495ED;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn span {
+  margin-left: 0.7rem;
+}
+
+@media screen and (max-width: 900px) {
+  .btn span {
+    display: none;
+  }
+}
+
+.btn1 {
+  background: rgb(216, 59, 59);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: 0.3s all ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: whitesmoke;
+}
+
+.btn1:hover {
+  background: whitesmoke;
+  color: rgb(216, 59, 59);;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn1 span {
+  margin-left: 0.7rem;
+}
+
+@media screen and (max-width: 900px) {
+  .btn1 span {
+    display: none;
+  }
+}
