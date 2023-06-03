@@ -4,13 +4,14 @@ import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import logoUsers from './user.jpg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faPlus, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPlus, faCheck, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+
+import { Card, ListGroup } from 'react-bootstrap';
+
 
 function Employees() {
 
@@ -43,6 +44,7 @@ function Employees() {
             codPostal: '',
             sexo: '',
             dataNasc: '',
+            image: '',
             registries: '',
         }
     )
@@ -122,6 +124,7 @@ function Employees() {
                         empregado.codPostal = dados.codPostal;
                         empregado.sexo = dados.sexo;
                         empregado.dataNasc = dados.dataNasc;
+                        empregado.image = dados.image;
                     }
                 });
                 setUpdateData(true);
@@ -163,49 +166,34 @@ function Employees() {
 
     return (
         <div className="empregados-container">
-            <br />
-            <Link className="button" to="/">
-                <button type="button" className="btn btn-outline-info btn-sm">Voltar</button>
-            </Link>
-            <br />
-            <br />
-            <h3>Adição de Funcionários</h3>
-            <img src={logoUsers} alt='Empregados' width="50px" />
-            <button className="btn btn-success" onClick={() => abrirFecharModalAdicionar()}><FontAwesomeIcon icon={faPlus} /></button>
+            <h2 className="titulo">Funcionários</h2>
+            <div className="barra">
+                <div className="esquerda">
+                    <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
+                    <h5 className="addfunc">Adicionar Funcionário</h5>
+                    <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                </div>
+                <div className="direita">
+                    <input className="pesquisa" type="search" placeholder="Pesquisar" aria-label="Pesquisar" />
+                    <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                </div></div>
+            <div className="cartoes">
+                {data.map(empregado => (
+                    <Card key={empregado.id} className="mt-4">
+                        <Card.Img variant="top" src={empregado.image} className="card-image" />
+                        <Card.Body>
+                            <Card.Title>{empregado.name}</Card.Title>
+                            <Card.Text>
+                                {empregado.email}
+                                <button style={{ fontSize: '100px !important' }} className="btn3"><FontAwesomeIcon icon={faPlus} /> Ver mais</button>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                ))}
 
-            <table className="table table-dark table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Contacto</th>
-                        <th>Email</th>
-                        <th>Morada</th>
-                        <th>País</th>
-                        <th>Código Postal</th>
-                        <th>Sexo</th>
-                        <th>Data de Nascimento</th>
-                        <th>Operação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(empregado => (
-                        <tr key={empregado.id}>
-                            <td>{empregado.name}</td>
-                            <td>{empregado.contact}</td>
-                            <td>{empregado.email}</td>
-                            <td>{empregado.morada}</td>
-                            <td>{empregado.pais}</td>
-                            <td>{empregado.codPostal}</td>
-                            <td>{empregado.sexo}</td>
-                            <td>{extrairData(empregado.dataNasc)}</td>
-                            <td>
-                                <button className="btn btn-primary" onClick={() => selecionarEmpregado(empregado, "Editar")}><FontAwesomeIcon icon={faEdit} /></button> {"   "}
-                                <button className="btn btn-danger" onClick={() => selecionarEmpregado(empregado, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            </div>
 
             <Modal isOpen={modalAdicionar}>
                 <ModalHeader>Adicionar Funcionário</ModalHeader>
@@ -245,8 +233,8 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-primary" onClick={() => pedidoPost()}>Adicionar</button>
-                    <button className="btn btn-danger" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
+                    <button className="btn" onClick={() => pedidoPost()}>Adicionar</button>
+                    <button className="btn1" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -296,8 +284,8 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-primary" onClick={() => pedidoPut()}>Editar</button>
-                    <button className="btn btn-danger" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
+                    <button className="btn" onClick={() => pedidoPut()}>Editar</button>
+                    <button className="btn1" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -306,8 +294,8 @@ function Employees() {
                     Confirma a eliminação deste funcionário: {empregadoSelecionado && empregadoSelecionado.name} ?
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-danger" onClick={() => pedidoDelete()}>Sim</button>
-                    <button className="btn btn-secondary" onClick={() => abrirFecharModalApagar()}>Não</button>
+                    <button className="btn" onClick={() => pedidoDelete()}>Sim</button>
+                    <button className="btn1" onClick={() => abrirFecharModalApagar()}>Não</button>
                 </ModalFooter>
             </Modal>
 
@@ -317,7 +305,7 @@ function Employees() {
                     <div>Os dados do funcionário que introduziu foram adicionados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-primary" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btn" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -327,7 +315,7 @@ function Employees() {
                     <div>Os dados do funcionário foram editados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-primary" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btn" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -337,7 +325,7 @@ function Employees() {
                     <div>O funcionário selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn btn-primary" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btn" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
