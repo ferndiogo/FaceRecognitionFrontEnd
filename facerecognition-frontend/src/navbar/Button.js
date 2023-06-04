@@ -6,7 +6,7 @@ import "./Button.css";
 function Button() {
   return (
     <>
-      <Link to="index">
+      <Link to="login">
         <button className="btn">
           <Icons.FaUserPlus />
           <span>Iniciar Sessão</span>

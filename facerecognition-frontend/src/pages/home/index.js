@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import Camera from "./camera";
 
-const Index = () => {
+const Home = () => {
   return (
     <div className="home-page">
       <h1>Captura de Imagem</h1>
@@ -11,4 +11,4 @@ const Index = () => {
   );
 }
 
-export default Index;
+export default Home;

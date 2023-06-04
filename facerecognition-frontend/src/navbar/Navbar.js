@@ -37,10 +37,10 @@ function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <Link to="/" className="navbar-logo" onClick={() => setSidebar(false)}>
+        <div className="navbar-logo">
           <FontAwesomeIcon icon={faExpand} />
           <div className="top">Rekognition</div>
-        </Link>
+        </div>
         {!mobile && (
           <ul className="nav-items">
             {navItems.map((item) => {
