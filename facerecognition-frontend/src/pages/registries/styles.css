@@ -1,0 +1,34 @@
+.utilizadores-container {
+    width: 100%;
+    max-width: 1500px;
+    padding: 5 10px;
+    margin: 30px auto;
+  }
+  
+  .utilizadores-container header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .utilizadores-container header img {
+    height: 50px;
+  }
+  
+  .utilizadores-container header button {
+    height: 50px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #dcdce6;
+    background-color: #008000;
+    margin-left: 16px;
+    transition: border-color 0, 5s;
+  }
+  
+  .utilizadores-container header button:hover {
+    border-color: #510bac;
+  }
+  
+  th, td{
+    max-width: 300px;
+    text-align: center;
+  }
