@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 
 function Employees() {
 
-    const baseUrl = "https://localhost:7136/Employee/";
+    const baseUrl = "https://192.168.1.1:7136/Employee/";
 
     const [data, setData] = useState([]);
 
@@ -200,10 +200,10 @@ function Employees() {
                             <Card.Text>
                                 {empregado.email}
                                 <div className='btnsCenter'>
-                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '100px !important', float: "left" }} className="btn3">
+                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btngreen">
                                         <FontAwesomeIcon icon={faPlus} />Registos
                                     </Link>
-                                    <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '100px !important', float: "left" }} className="btn3">
+                                    <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem'}} className="btn">
                                         <FontAwesomeIcon icon={faPlus} />Ver mais
                                     </button>
                                 </div>
@@ -394,7 +394,7 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); }}>Editar</button>
+                    <button className="btngreen" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); }}>Editar</button>
                     <button className="btn" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>
                     <button className="btn1" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
                 </ModalFooter>
