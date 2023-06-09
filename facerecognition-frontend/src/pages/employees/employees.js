@@ -200,7 +200,7 @@ function Employees() {
                             <Card.Text>
                                 {empregado.email}
                                 <div className='btnsCenter'>
-                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btngreen">
+                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} onClick={() => selecionarEmpregado(empregado, "Detalhes")} className="btngreen">
                                         <FontAwesomeIcon icon={faPlus} />Registos
                                     </Link>
                                     <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem'}} className="btn">

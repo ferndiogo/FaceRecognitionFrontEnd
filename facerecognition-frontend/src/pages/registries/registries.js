@@ -8,18 +8,22 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faPlus, faCheck, faMagnifyingGlass, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { useParams } from 'react-router-dom';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Select from 'react-select';
 
 function Registries() {
 
-    const baseUrl = "https://localhost:7136/Registry/";
-    const baseUrl1 = "https://localhost:7136/Employee/";
+    const baseUrl = "https://192.168.1.1:7136/Registry/";
+    const baseUrlEmp = "https://192.168.1.1:7136/Employee/";
+
+    const idEmp = useParams().id;
 
     const [data, setData] = useState([]);
-    const [data1, setData1] = useState([]);
+    const [dataEmp, setDataEmp] = useState({});
 
     const [updateData, setUpdateData] = useState(true);
-    const [updateData1, setUpdateData1] = useState(true);
 
     const [modalAdicionar, setModalAdicionar] = useState(false);
 
@@ -39,9 +43,13 @@ function Registries() {
             dateTime: '',
             type: '',
             employeeId: '',
-            employee: '',
         }
     )
+
+    const entrasaida = [
+        { value: 'E', label: 'Entrada', name: 'type' },
+        { value: 'S', label: 'Saída', name: 'type' }
+    ];
 
     const selecionarRegisto = (registo, opcao) => {
         setRegistoSelecionado(registo);
@@ -81,19 +89,29 @@ function Registries() {
         console.log(registoSelecionado);
     }
 
+    const handleChangeSelect = e => {
+        const { name, label, value } = e;
+        setRegistoSelecionado({
+            ...registoSelecionado, [name]: value
+        });
+        console.log(registoSelecionado);
+    }
+
     const pedidoGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get(baseUrl + "employee/" + idEmp)
             .then(response => {
                 setData(response.data);
+                setDataEmp(response.data[0].employee);
             }).catch(error => {
                 console.log(error);
             })
+            if(Object.keys(dataEmp).length === 0) pedidoGetEmp();
     }
 
-    const pedidoGet1 = async () => {
-        await axios.get(baseUrl1)
+    const pedidoGetEmp = async () => {
+        await axios.get(baseUrlEmp + idEmp)
             .then(response => {
-                setData1(response.data);
+                setDataEmp(response.data);
             }).catch(error => {
                 console.log(error);
             })
@@ -101,7 +119,7 @@ function Registries() {
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;
-        await axios.post(baseUrl, registoSelecionado)
+        await axios.post(baseUrl+"manual/", registoSelecionado)
             .then(response => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
@@ -170,50 +188,39 @@ function Registries() {
         }
     }, [updateData])
 
-    //impedir loop pedidoGet
-    useEffect(() => {
-        if (updateData1) {
-            pedidoGet1();
-            setUpdateData1(false);
-        }
-    }, [updateData1])
-
     return (
         <div className="empregados-container">
-            <h2 className="titulo">Funcionários</h2>
-            <div className="barra">
-                <div className="esquerda">
-                    <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
-                    <h5 className="addfunc">Adicionar Funcionário</h5>
-                    <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
+            <h2 className="titulo">Registos de Ponto</h2>
+            <br />
+            <button onClick={() => { abrirFecharModalAdicionar(); registoSelecionado.employeeId=idEmp;}}>Adicionar</button>
+            <div className="card" style={{ width: '500px', maxHeight:'200px' }}>
+                <div className="row no-gutters">
+                    <div className="col-sm-5">
+                        <img className="card-img" src={dataEmp.image} />
+                    </div>
+                    <div className="col-sm-7">
+                        <div className="card-body">
+                            <h5 className="card-title">{dataEmp.name}</h5>
+                            <p className="card-text">{dataEmp.email}<br />{dataEmp.contact}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="direita">
-                    <input className="pesquisa" type="search" placeholder="Pesquisar" aria-label="Pesquisar" />
-                    <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                </div></div>
-
+            </div>
             <table className="table table-dark table-striped mt-4">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Data e Hora</th>
                         <th>Entrada/Saída</th>
-                        <th>ID Empregado</th>
-                        <th>Empregado</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map(registo => (
                         <tr key={registo.id}>
-                            <td>{registo.id}</td>
                             <td>{extrairDataHora(registo.dateTime)}</td>
                             <td>{getTipo(registo)}</td>
-                            <td>{registo.employeeId}</td>
-                            <td>{registo.employee.name}</td>
                             <td>
-                                <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button> {"   "}
+                                <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
                                 <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
                             </td>
                         </tr>
@@ -227,19 +234,19 @@ function Registries() {
                     <div className="form-group">
                         <label>Data e Hora:</label>
                         <br />
-                        <input type="datetime" className="form-control" name="name" onChange={handleChange} />
+                        <input type="dateTime" className="form-control" name="dateTime" onChange={handleChange} />
                         <br />
                         <label>Entrada/Saída:</label>
                         <br />
-                        <input type="text" className="form-control" name="contact" onChange={handleChange} />
+                        <Select
+                            options={entrasaida}
+                            onChange={handleChangeSelect}
+                            placeholder="Selecione uma opção"
+                        />
                         <br />
                         <label>ID Empregado:</label>
                         <br />
-                        <input type="text" className="form-control" name="email" onChange={handleChange} />
-                        <br />
-                        <label>Empregado:</label>
-                        <br />
-                        <input type="text" className="form-control" name="morada" onChange={handleChange} />
+                        <input readOnly={true} value={dataEmp.id} type="text" className="form-control" name="employeeId" onChange={handleChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
@@ -254,23 +261,21 @@ function Registries() {
                     <div className="form-group">
                         <label>Data e Hora:</label>
                         <br />
-                        <input type="date" className="form-control" name="dateTime" onChange={handleChange}
+                        <input type="dateTime" className="form-control" name="dateTime" onChange={handleChange}
                             value={registoSelecionado && registoSelecionado.dateTime} />
                         <br />
                         <label>Entrada/Saída:</label>
                         <br />
-                        <input type="text" className="form-control" name="type" onChange={handleChange}
-                            value={registoSelecionado && registoSelecionado.type} />
+                        <Select
+                            options={entrasaida}
+                            onChange={handleChangeSelect}
+                            placeholder="Selecione uma opção"
+                            defaultValue={registoSelecionado.type === 'E'? entrasaida[0]: entrasaida[1]}
+                        />
                         <br />
                         <label>ID Empregado:</label>
                         <br />
-                        <input type="number" className="form-control" name="employeeId" onChange={handleChange}
-                            value={registoSelecionado && registoSelecionado.employeeId} />
-                        <br />
-                        <label>Empregado:</label>
-                        <br />
-                        <input type="text" className="form-control" name="employee" onChange={handleChange}
-                            value={registoSelecionado && registoSelecionado.employee} />
+                        <input readOnly={true} value={dataEmp.id} type="text" className="form-control" name="employeeId" onChange={handleChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
@@ -281,7 +286,7 @@ function Registries() {
 
             <Modal isOpen={modalApagar}>
                 <ModalBody>
-                    Confirma a eliminação deste registo: {registoSelecionado && registoSelecionado.id} ?
+                    Confirma a eliminação deste registo de <b>{dataEmp.name}</b> com data e hora: <b>{extrairDataHora(registoSelecionado.dateTime)}</b> ?
                 </ModalBody>
                 <ModalFooter>
                     <button className="btn" onClick={() => pedidoDelete()}>Sim</button>
@@ -292,7 +297,7 @@ function Registries() {
             <Modal isOpen={modalCriado}>
                 <ModalHeader>Registo Adicionado</ModalHeader>
                 <ModalBody>
-                    <div>Os dados do funcionário que introduziu foram adicionados com sucesso!</div>
+                    <div>O novo registo foi adicionado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
                     <button className="btn" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
@@ -302,7 +307,7 @@ function Registries() {
             <Modal isOpen={modalEditado}>
                 <ModalHeader>Registo Editado</ModalHeader>
                 <ModalBody>
-                    <div>Os dados do funcionário foram editados com sucesso!</div>
+                    <div>O registo foi modificado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
                     <button className="btn" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
