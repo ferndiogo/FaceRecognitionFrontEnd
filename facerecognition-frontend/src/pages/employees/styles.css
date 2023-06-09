@@ -129,6 +129,12 @@ td {
   margin-right: 10px;
 }
 
+.btnsCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media screen and (max-width: 900px) {
   .card {
     width: 80%;

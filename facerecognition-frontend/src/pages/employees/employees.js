@@ -11,11 +11,12 @@ import { faUser, faPlus, faCheck, faMagnifyingGlass } from '@fortawesome/free-so
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Card, ListGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 
 function Employees() {
 
-    const baseUrl = "https://localhost:7136/Employee/";
+    const baseUrl = "https://192.168.1.1:7136/Employee/";
 
     const [data, setData] = useState([]);
 
@@ -32,6 +33,8 @@ function Employees() {
     const [modalEditado, setModalEditado] = useState(false);
 
     const [modalApagado, setModalApagado] = useState(false);
+
+    const [modalDetalhes, setModalDetalhes] = useState(false);
 
     const [empregadoSelecionado, setEmpregadoSelecionado] = useState(
         {
@@ -51,8 +54,9 @@ function Employees() {
 
     const selecionarEmpregado = (empregado, opcao) => {
         setEmpregadoSelecionado(empregado);
-        (opcao === "Editar") ?
-            abrirFecharModalEditar() : abrirFecharModalApagar();
+        if (opcao === "Editar") abrirFecharModalEditar();
+        else if (opcao === "Apagar") abrirFecharModalApagar();
+        else abrirFecharModalDetalhes();
     }
 
     const abrirFecharModalAdicionar = () => {
@@ -77,6 +81,10 @@ function Employees() {
 
     const abrirFecharModalApagado = () => {
         setModalApagado(!modalApagado);
+    }
+
+    const abrirFecharModalDetalhes = () => {
+        setModalDetalhes(!modalDetalhes);
     }
 
     const handleChange = e => {
@@ -150,7 +158,8 @@ function Employees() {
     function extrairData(dateTimeString) {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
-        const month = dateObj.getMonth() + 1;
+        var month = dateObj.getMonth() + 1;
+        if (month <= 9) month = "0" + month;
         const day = dateObj.getDate();
         const formattedDate = `${day}/${month}/${year}`;
         return formattedDate;
@@ -164,6 +173,8 @@ function Employees() {
         }
     }, [updateData])
 
+
+
     return (
         <div className="empregados-container">
             <h2 className="titulo">Funcionários</h2>
@@ -176,9 +187,10 @@ function Employees() {
                     </button>
                 </div>
                 <div className="direita">
-                    <input className="pesquisa" type="search" placeholder="Pesquisar" aria-label="Pesquisar" />
+                    <input className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                </div></div>
+                </div>
+            </div>
             <div className="cartoes">
                 {data.map(empregado => (
                     <Card key={empregado.id} className="mt-4">
@@ -187,7 +199,14 @@ function Employees() {
                             <Card.Title>{empregado.name}</Card.Title>
                             <Card.Text>
                                 {empregado.email}
-                                <button style={{ fontSize: '100px !important' }} className="btn3"><FontAwesomeIcon icon={faPlus} /> Ver mais</button>
+                                <div className='btnsCenter'>
+                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btngreen">
+                                        <FontAwesomeIcon icon={faPlus} />Registos
+                                    </Link>
+                                    <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem'}} className="btn">
+                                        <FontAwesomeIcon icon={faPlus} />Ver mais
+                                    </button>
+                                </div>
                             </Card.Text>
                         </Card.Body>
                     </Card>
@@ -329,7 +348,57 @@ function Employees() {
                 </ModalFooter>
             </Modal>
 
-
+            <Modal isOpen={modalDetalhes}>
+                <ModalHeader>Detalhes de um Funcionário</ModalHeader>
+                <ModalBody>
+                    <div className="form-group">
+                        <label>Nome:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="name" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.name} />
+                        <br />
+                        <label>Contacto:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="contact" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.contact} />
+                        <br />
+                        <label>Email:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="email" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.email} />
+                        <br />
+                        <label>Morada:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="morada" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.morada} />
+                        <br />
+                        <label>País:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="pais" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.pais} />
+                        <br />
+                        <label>Código Postal:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="codPostal" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.codPostal} />
+                        <br />
+                        <label>Sexo:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="sexo" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.sexo} />
+                        <br />
+                        <label>Data de Nascimento:</label>
+                        <br />
+                        <input type="text" className="form-control-plaintext" name="dataNasc" onChange={handleChange}
+                            readOnly={true} value={empregadoSelecionado && extrairData(empregadoSelecionado.dataNasc)} />
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <button className="btngreen" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); }}>Editar</button>
+                    <button className="btn" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>
+                    <button className="btn1" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
+                </ModalFooter>
+            </Modal>
 
         </div>
     );
