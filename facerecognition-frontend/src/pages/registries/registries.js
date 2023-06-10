@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
+import TableRegistos from './tableRegistos';
 
 function Registries() {
 
@@ -36,6 +37,8 @@ function Registries() {
     const [modalEditado, setModalEditado] = useState(false);
 
     const [modalApagado, setModalApagado] = useState(false);
+
+    const [searchText, setSearchText] = useState(null);
 
     const [registoSelecionado, setRegistoSelecionado] = useState(
         {
@@ -89,6 +92,10 @@ function Registries() {
         console.log(registoSelecionado);
     }
 
+    const handleChangeSearch = e => {
+        setSearchText(new Date(e.target.value));
+    }
+
     const handleChangeSelect = e => {
         const { name, label, value } = e;
         setRegistoSelecionado({
@@ -105,7 +112,7 @@ function Registries() {
             }).catch(error => {
                 console.log(error);
             })
-            if(Object.keys(dataEmp).length === 0) pedidoGetEmp();
+        if (Object.keys(dataEmp).length === 0) pedidoGetEmp();
     }
 
     const pedidoGetEmp = async () => {
@@ -119,7 +126,7 @@ function Registries() {
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;
-        await axios.post(baseUrl+"manual/", registoSelecionado)
+        await axios.post(baseUrl + "manual/", registoSelecionado)
             .then(response => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
@@ -192,7 +199,7 @@ function Registries() {
         <div className="empregados-container">
             <h2 className="titulo">Registos de Ponto</h2>
 
-            <div className="card" style={{ width: '500px', maxHeight:'200px' }}>
+            <div className="card" style={{ width: '500px', maxHeight: '200px' }}>
                 <div className="row no-gutters">
                     <div className="col-sm-5">
                         <img className="card-img" src={dataEmp.image} />
@@ -215,11 +222,10 @@ function Registries() {
                     </button>
                 </div>
                 <div className="direita">
-                    <input className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" />
+                    <input className="pesquisa" type="date" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch} />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </div>
             </div>
-
             <table className="table table-dark table-striped mt-4">
                 <thead>
                     <tr>
@@ -229,19 +235,9 @@ function Registries() {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map(registo => (
-                        <tr key={registo.id}>
-                            <td>{extrairDataHora(registo.dateTime)}</td>
-                            <td>{getTipo(registo)}</td>
-                            <td>
-                                <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                                <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
-                        </tr>
-                    ))}
+                    <TableRegistos selecionarRegisto={selecionarRegisto} registos={data} search={searchText} />
                 </tbody>
             </table>
-
             <Modal isOpen={modalAdicionar}>
                 <ModalHeader>Adicionar Registo</ModalHeader>
                 <ModalBody>
@@ -284,7 +280,7 @@ function Registries() {
                             options={entrasaida}
                             onChange={handleChangeSelect}
                             placeholder="Selecione uma opção"
-                            defaultValue={registoSelecionado.type === 'E'? entrasaida[0]: entrasaida[1]}
+                            defaultValue={registoSelecionado.type === 'E' ? entrasaida[0] : entrasaida[1]}
                         />
                         <br />
                         <label>ID Empregado:</label>
