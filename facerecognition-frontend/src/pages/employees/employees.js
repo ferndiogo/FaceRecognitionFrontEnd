@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import Cards from './cards';
 
 
 function Employees() {
@@ -36,6 +38,8 @@ function Employees() {
 
     const [modalDetalhes, setModalDetalhes] = useState(false);
 
+    const [searchText, setSearchText] = useState('');
+
     const [empregadoSelecionado, setEmpregadoSelecionado] = useState(
         {
             id: '',
@@ -51,6 +55,11 @@ function Employees() {
             registries: '',
         }
     )
+
+    const sexoopc = [
+        { value: 'M', label: 'Masculino', name: 'sexo' },
+        { value: 'F', label: 'Feminíno', name: 'sexo' }
+    ];
 
     const selecionarEmpregado = (empregado, opcao) => {
         setEmpregadoSelecionado(empregado);
@@ -89,6 +98,18 @@ function Employees() {
 
     const handleChange = e => {
         const { name, value } = e.target;
+        setEmpregadoSelecionado({
+            ...empregadoSelecionado, [name]: value
+        });
+        console.log(empregadoSelecionado);
+    }
+
+    const handleChangeSearch = e => {
+        setSearchText(e.target.value);
+    }
+
+    const handleChangeSelect = e => {
+        const { name, label, value } = e;
         setEmpregadoSelecionado({
             ...empregadoSelecionado, [name]: value
         });
@@ -155,7 +176,7 @@ function Employees() {
             })
     }
 
-    function extrairData(dateTimeString) {
+    const extrairData  = (dateTimeString) => {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
         var month = dateObj.getMonth() + 1;
@@ -173,8 +194,6 @@ function Employees() {
         }
     }, [updateData])
 
-
-
     return (
         <div className="empregados-container">
             <h2 className="titulo">Funcionários</h2>
@@ -186,32 +205,14 @@ function Employees() {
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>
-                <div className="direita">
-                    <input className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" />
+                <form className="direita">
+                    <input id="search" className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch}/>
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                </div>
+                </form>
             </div>
-            <div className="cartoes">
-                {data.map(empregado => (
-                    <Card key={empregado.id} className="mt-4">
-                        <Card.Img variant="top" src={empregado.image} className="card-image" />
-                        <Card.Body>
-                            <Card.Title>{empregado.name}</Card.Title>
-                            <Card.Text>
-                                {empregado.email}
-                                <div className='btnsCenter'>
-                                    <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} onClick={() => selecionarEmpregado(empregado, "Detalhes")} className="btngreen">
-                                        <FontAwesomeIcon icon={faPlus} />Registos
-                                    </Link>
-                                    <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem'}} className="btn">
-                                        <FontAwesomeIcon icon={faPlus} />Ver mais
-                                    </button>
-                                </div>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                ))}
 
+            <div id="cards" className="cartoes">
+                <Cards empregados={data} search={searchText} selecionarEmpregado={selecionarEmpregado}/>
             </div>
 
             <Modal isOpen={modalAdicionar}>
@@ -244,7 +245,7 @@ function Employees() {
                         <br />
                         <label>Sexo:</label>
                         <br />
-                        <input type="text" className="form-control" name="sexo" onChange={handleChange} />
+                        <Select options={sexoopc} onChange={handleChangeSelect} placeholder="Selecione uma opção" />
                         <br />
                         <label>Data de Nascimento:</label>
                         <br />
