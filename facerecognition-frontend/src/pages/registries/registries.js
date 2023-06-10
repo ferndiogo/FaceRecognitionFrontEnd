@@ -191,8 +191,7 @@ function Registries() {
     return (
         <div className="empregados-container">
             <h2 className="titulo">Registos de Ponto</h2>
-            <br />
-            <button onClick={() => { abrirFecharModalAdicionar(); registoSelecionado.employeeId=idEmp;}}>Adicionar</button>
+
             <div className="card" style={{ width: '500px', maxHeight:'200px' }}>
                 <div className="row no-gutters">
                     <div className="col-sm-5">
@@ -206,6 +205,21 @@ function Registries() {
                     </div>
                 </div>
             </div>
+
+            <div className="barra">
+                <div className="esquerda">
+                    <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
+                    <h5 className="addfunc">Adicionar Registo</h5>
+                    <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                </div>
+                <div className="direita">
+                    <input className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" />
+                    <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                </div>
+            </div>
+
             <table className="table table-dark table-striped mt-4">
                 <thead>
                     <tr>
