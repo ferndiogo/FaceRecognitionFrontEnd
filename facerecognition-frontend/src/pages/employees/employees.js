@@ -13,7 +13,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
 import Cards from './cards';
 
-
 function Employees() {
 
     const baseUrl = "https://localhost:7136/Employee/";
@@ -94,6 +93,10 @@ function Employees() {
         setModalDetalhes(!modalDetalhes);
     }
 
+    const atualizar = () => {
+        window.location.reload(false);
+    }
+
     const handleChange = e => {
         const { name, value } = e.target;
         setEmpregadoSelecionado({
@@ -140,6 +143,7 @@ function Employees() {
         formData.append("pais", empregadoSelecionado.pais)
         formData.append("codPostal", empregadoSelecionado.codPostal)
         formData.append("sexo", empregadoSelecionado.sexo)
+        formData.append("dataNasc", empregadoSelecionado.dataNasc)
         formData.append("image", empregadoSelecionado.image)
         axios.post(baseUrl, formData)
             .then(response => {
@@ -153,7 +157,18 @@ function Employees() {
     }
 
     const pedidoPut = async () => {
-        await axios.put(baseUrl + empregadoSelecionado.id, empregadoSelecionado)
+        const formData = new FormData();
+        formData.append('name', empregadoSelecionado.name);
+        formData.append('contact', empregadoSelecionado.contact);
+        formData.append('email', empregadoSelecionado.email);
+        formData.append('morada', empregadoSelecionado.morada);
+        formData.append('pais', empregadoSelecionado.pais);
+        formData.append('codPostal', empregadoSelecionado.codPostal);
+        formData.append('sexo', empregadoSelecionado.sexo);
+        formData.append('dataNasc', empregadoSelecionado.dataNasc);
+        formData.append('image', empregadoSelecionado.image);
+
+        await axios.put(baseUrl + empregadoSelecionado.id, formData)
             .then(response => {
                 var dados = response.data;
                 var dadosAux = data;
@@ -174,10 +189,12 @@ function Employees() {
                 setUpdateData(true);
                 abrirFecharModalEditar();
                 abrirFecharModalEditado();
-            }).catch(error => {
-                console.log(error);
             })
+            .catch(error => {
+                console.log(error);
+            });
     }
+
 
     const pedidoDelete = async () => {
         await axios.delete(baseUrl + empregadoSelecionado.id)
@@ -194,14 +211,20 @@ function Employees() {
     function extrairData(dateTimeString) {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
-        var month = dateObj.getMonth() + 1;
-        if (month <= 9) month = "0" + month;
-        const day = dateObj.getDate();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+        const day = dateObj.getDate().toString().padStart(2, '0');
+
         const formattedDate = `${day}/${month}/${year}`;
         return formattedDate;
     }
 
-
+    function formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = ('0' + (d.getMonth() + 1)).slice(-2);
+        const day = ('0' + d.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
 
     //impedir loop pedidoGet
     useEffect(() => {
@@ -273,8 +296,8 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoPost()}>Adicionar</button>
-                    <button className="btn1" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
+                    <button className="btnOk" onClick={() => pedidoPost()}>Adicionar</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -314,21 +337,24 @@ function Employees() {
                         <br />
                         <label>Sexo:</label>
                         <br />
-                        <input type="text" className="form-control" name="sexo" onChange={handleChange}
-                            value={empregadoSelecionado && empregadoSelecionado.sexo} />
+                        <Select options={sexoopc} onChange={handleChangeSelect} placeholder={empregadoSelecionado && empregadoSelecionado.sexo === 'M'
+                            ? 'Masculino'
+                            : empregadoSelecionado && empregadoSelecionado.sexo === 'F'
+                                ? 'Feminino'
+                                : ''} />
                         <br />
                         <label>Data de Nascimento:</label>
                         <br />
                         <input type="date" className="form-control" name="dataNasc" onChange={handleChange}
-                            value={empregadoSelecionado && empregadoSelecionado.dataNasc} />
+                            value={empregadoSelecionado && formatDate(empregadoSelecionado.dataNasc)} />
                         <label>Imagem:</label>
                         <br />
                         <input type="file" className="form-control" name="image" accept=".jpg,.png,.jpeg" onChange={handleImagemChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoPut()}>Editar</button>
-                    <button className="btn1" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
+                    <button className="btnOk" onClick={() => pedidoPut()}>Editar</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -338,7 +364,7 @@ function Employees() {
                 </ModalBody>
                 <ModalFooter>
                     <button className="btn" onClick={() => pedidoDelete()}>Sim</button>
-                    <button className="btn1" onClick={() => abrirFecharModalApagar()}>Não</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalApagar()}>Não</button>
                 </ModalFooter>
             </Modal>
 
@@ -358,7 +384,7 @@ function Employees() {
                     <div>Os dados do funcionário foram editados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btn" onClick={() => { abrirFecharModalEditado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -368,12 +394,12 @@ function Employees() {
                     <div>O funcionário selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btn" onClick={() => { abrirFecharModalApagado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
             <Modal isOpen={modalDetalhes}>
-                <ModalHeader>Detalhes de um Funcionário</ModalHeader>
+                <ModalHeader>Detalhes do Funcionário</ModalHeader>
                 <ModalBody>
                     <div className="form-group">
                         <label>Nome:</label>
@@ -409,7 +435,11 @@ function Employees() {
                         <label>Sexo:</label>
                         <br />
                         <input type="text" className="form-control-plaintext" name="sexo" onChange={handleChange}
-                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.sexo} />
+                            readOnly={true} value={empregadoSelecionado && empregadoSelecionado.sexo === 'M'
+                                ? 'Masculino'
+                                : empregadoSelecionado && empregadoSelecionado.sexo === 'F'
+                                    ? 'Feminino'
+                                    : ''} />
                         <br />
                         <label>Data de Nascimento:</label>
                         <br />
@@ -418,9 +448,9 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btngreen" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); }}>Editar</button>
-                    <button className="btn" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>
-                    <button className="btn1" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
+                    <button className="btnInfo" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); }}>Editar</button>
+                    <button className="btnDanger" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>
+                    <button className="btnOk" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
