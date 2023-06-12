@@ -1,5 +1,8 @@
 import React from 'react';
 import './styles.css';
+import fernandoImage from './img/Fernando.jpg';
+import vascoImage from './img/Vasco.jpg';
+import { Card } from 'react-bootstrap';
 
 function About() {
     return (
@@ -12,35 +15,26 @@ function About() {
             <p className='pContent'>
                 Esta aplicação foi desenvolvida no âmbito da unidade curricular de projeto final e foi desenvolvida pelos alunos:
             </p>
-            <div className='cards'>
-                <div className="card" style={{ width: '500px', height: '180px' }}>
-                    <div className="row no-gutters">
-                        <div className="col-sm-5">
-                            <img className="card-img" src={require("./img/Fernando.jpg")} />
-                        </div>
-                        <div className="col-sm-7">
-                            <div className="card-body">
-                                <h5 className="card-title">Fernando Fuzeiro</h5>
-                                <p className="card-text">Nº 22111</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="card" style={{ width: '500px', height: '180px' }}>
-                    <div className="row no-gutters">
-                        <div className="col-sm-5">
-                            <img className="card-img" src={require("./img/Vasco.jpg")} />
-                        </div>
-                        <div className="col-sm-7">
-                            <div className="card-body">
-                                <h5 className="card-title">Vasco Araújo</h5>
-                                <p className="card-text">Nº 23055</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="d-flex flex-wrap">
+                <Card className="mt-4 d-flex flex-row cardbody">
+                    <Card.Img variant="top" src={fernandoImage} className="card-image" />
+                    <Card.Body className="d-flex flex-column">
+                        <Card.Title>Fernando Fuzeiro</Card.Title>
+                        <Card.Text>Nº 22111</Card.Text>
+                    </Card.Body>
+                </Card>
+
+                <Card className="mt-4 d-flex flex-row">
+                    <Card.Img variant="top" src={vascoImage} className="card-image" />
+                    <Card.Body className="d-flex flex-column cardbody">
+                        <Card.Title>Vasco Araujo</Card.Title>
+                        <Card.Text>Nº 23055</Card.Text>
+                    </Card.Body>
+                </Card>
+                <br /><br /><br />
             </div>
+
         </div>
     );
 }
