@@ -17,17 +17,17 @@ function About() {
             </p>
 
             <div className="d-flex flex-wrap">
-                <Card className="mt-4 d-flex flex-row cardbody">
-                    <Card.Img variant="top" src={fernandoImage} className="card-image" />
-                    <Card.Body className="d-flex flex-column">
-                        <Card.Title>Fernando Fuzeiro</Card.Title>
-                        <Card.Text>Nº 22111</Card.Text>
+                <Card className="mt-4 d-flex flex-row cardAll">
+                    <Card.Img variant="top" src={fernandoImage} className="card-imageAbout" />
+                    <Card.Body className="d-flex flex-column bodyCard">
+                        <Card.Title className='titleCard'>Fernando Fuzeiro</Card.Title>
+                        <Card.Text className='textCard'>Nº 22111</Card.Text>
                     </Card.Body>
                 </Card>
 
-                <Card className="mt-4 d-flex flex-row">
-                    <Card.Img variant="top" src={vascoImage} className="card-image" />
-                    <Card.Body className="d-flex flex-column cardbody">
+                <Card className="mt-4 d-flex flex-row cardAll">
+                    <Card.Img variant="top" src={vascoImage} className="card-imageAbout" />
+                    <Card.Body className="d-flex flex-column bodyCard">
                         <Card.Title>Vasco Araujo</Card.Title>
                         <Card.Text>Nº 23055</Card.Text>
                     </Card.Body>
