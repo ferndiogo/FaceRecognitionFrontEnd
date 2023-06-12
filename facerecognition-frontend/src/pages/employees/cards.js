@@ -22,11 +22,11 @@ function Cards({ empregados, search, selecionarEmpregado }) {
                         <Card.Text>
                             {empregado.email}
                             <div className='btnsCenter'>
-                                <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btngreen">
-                                    <FontAwesomeIcon icon={faPlus} />Registos
+                                <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btnInfo">
+                                    <FontAwesomeIcon icon={faPlus} /> Registos
                                 </Link>
                                 <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem' }} className="btn">
-                                    <FontAwesomeIcon icon={faPlus} />Ver mais
+                                    <FontAwesomeIcon icon={faPlus} /> Ver mais
                                 </button>
                             </div>
                         </Card.Text>
@@ -48,7 +48,7 @@ function Cards({ empregados, search, selecionarEmpregado }) {
                                 <Card.Text>
                                     {empregado.email}
                                     <div className='btnsCenter'>
-                                        <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btngreen">
+                                        <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btnInfo">
                                             <FontAwesomeIcon icon={faPlus} />Registos
                                         </Link>
                                         <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem' }} className="btn">
