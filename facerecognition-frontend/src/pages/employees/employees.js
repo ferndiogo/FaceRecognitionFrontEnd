@@ -10,15 +10,13 @@ import { faUser, faPlus, faCheck, faMagnifyingGlass } from '@fortawesome/free-so
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Card, ListGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import Cards from './cards';
 
 
 function Employees() {
 
-    const baseUrl = "https://192.168.1.1:7136/Employee/";
+    const baseUrl = "https://localhost:7136/Employee/";
 
     const [data, setData] = useState([]);
 
@@ -58,7 +56,7 @@ function Employees() {
 
     const sexoopc = [
         { value: 'M', label: 'Masculino', name: 'sexo' },
-        { value: 'F', label: 'Feminíno', name: 'sexo' }
+        { value: 'F', label: 'Feminino', name: 'sexo' }
     ];
 
     const selecionarEmpregado = (empregado, opcao) => {
@@ -109,7 +107,7 @@ function Employees() {
     }
 
     const handleChangeSelect = e => {
-        const { name, label, value } = e;
+        const { name, value } = e;
         setEmpregadoSelecionado({
             ...empregadoSelecionado, [name]: value
         });
@@ -155,6 +153,7 @@ function Employees() {
                         empregado.dataNasc = dados.dataNasc;
                         empregado.image = dados.image;
                     }
+                    return empregado;
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
