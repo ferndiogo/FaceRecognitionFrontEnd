@@ -17,7 +17,7 @@ import moment from 'moment';
 
 function Employees() {
 
-    const baseUrl = "https://localhost:7136/Employee/";
+    const baseUrl = "https://192.168.1.1:7136/Employee/";
 
     const [data, setData] = useState([]);
 
@@ -229,6 +229,9 @@ function Employees() {
     }
 
     const handleImagemChange = (event) => {
+        setEmpregadoSelecionado({
+            ...empregadoSelecionado, image: event.target.files[0]
+        });
         const file = event.target.files[0];
         const isBlankInput = !file;
 
@@ -353,7 +356,8 @@ function Employees() {
             })
     }
 
-    function extrairData(dateTimeString) {
+
+    const extrairData = (dateTimeString) => {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
         const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
