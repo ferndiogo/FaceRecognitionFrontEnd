@@ -114,6 +114,13 @@ function Employees() {
         console.log(empregadoSelecionado);
     }
 
+    const handleImagemChange = (e) => {
+        setEmpregadoSelecionado({
+            ...empregadoSelecionado, image: e.target.files[0]
+        });
+        console.log(empregadoSelecionado);
+    }
+
     const pedidoGet = async () => {
         await axios.get(baseUrl)
             .then(response => {
@@ -125,7 +132,16 @@ function Employees() {
 
     const pedidoPost = async () => {
         delete empregadoSelecionado.id;
-        await axios.post(baseUrl, empregadoSelecionado)
+        const formData = new FormData();
+        formData.append("name", empregadoSelecionado.name)
+        formData.append("contact", empregadoSelecionado.contact)
+        formData.append("email", empregadoSelecionado.email)
+        formData.append("morada", empregadoSelecionado.morada)
+        formData.append("pais", empregadoSelecionado.pais)
+        formData.append("codPostal", empregadoSelecionado.codPostal)
+        formData.append("sexo", empregadoSelecionado.sexo)
+        formData.append("image", empregadoSelecionado.image)
+        axios.post(baseUrl, formData)
             .then(response => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
@@ -185,7 +201,7 @@ function Employees() {
         return formattedDate;
     }
 
-    
+
 
     //impedir loop pedidoGet
     useEffect(() => {
@@ -207,12 +223,12 @@ function Employees() {
                     </button>
                 </div>
                 <form className="direita">
-                    <input id="search" className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch}/>
+                    <input id="search" className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch} />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </form>
             </div>
             <div id="cards" className="cartoes">
-                <Cards empregados={data} search={searchText} selecionarEmpregado={selecionarEmpregado}/>
+                <Cards empregados={data} search={searchText} selecionarEmpregado={selecionarEmpregado} />
             </div>
 
             <Modal isOpen={modalAdicionar}>
@@ -250,6 +266,10 @@ function Employees() {
                         <label>Data de Nascimento:</label>
                         <br />
                         <input type="date" className="form-control" name="dataNasc" onChange={handleChange} />
+                        <br />
+                        <label>Imagem:</label>
+                        <br />
+                        <input type="file" className="form-control" name="image" accept=".jpg,.png,.jpeg" onChange={handleImagemChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
@@ -301,6 +321,9 @@ function Employees() {
                         <br />
                         <input type="date" className="form-control" name="dataNasc" onChange={handleChange}
                             value={empregadoSelecionado && empregadoSelecionado.dataNasc} />
+                        <label>Imagem:</label>
+                        <br />
+                        <input type="file" className="form-control" name="image" accept=".jpg,.png,.jpeg" onChange={handleImagemChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
