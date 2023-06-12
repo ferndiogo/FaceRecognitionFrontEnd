@@ -1,0 +1,24 @@
+h1 {
+    margin-top: 4rem;
+}
+
+.pContent {
+    color: white;
+    font-size: 25px;
+}
+
+.content {
+    margin: auto;
+    padding: 0% 20%;
+}
+
+.card {
+    float: left;
+    display: block;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
