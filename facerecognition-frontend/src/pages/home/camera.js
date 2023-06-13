@@ -15,8 +15,6 @@ function Camera() {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [updateData, setUpdateData] = useState(true);
-
   const [modalAdicionado, setModalAdicionado] = useState(false);
 
   const baseUrl = "https://localhost:7136/Registry/";
@@ -61,7 +59,6 @@ function Camera() {
         try {
           const response = await axios.post(baseUrl, formData);
           setData(data.concat(response.data));
-          setUpdateData(true);
         } catch (error) {
           console.log(error);
         }
@@ -77,7 +74,6 @@ function Camera() {
         try {
           const response = await axios.post(baseUrl, formData);
           setData(data.concat(response.data));
-          setUpdateData(true);
           closeModal();
           abrirFecharModalAdicionado()
         } catch (error) {

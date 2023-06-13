@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,13 +6,15 @@ import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faPlus, faCheck, faMagnifyingGlass, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPlus, faCheck, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { useParams } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
+
 import TableRegistos from './tableRegistos';
+import moment from 'moment';
 
 function Registries() {
 
@@ -20,6 +22,9 @@ function Registries() {
     const baseUrlEmp = "https://192.168.1.1:7136/Employee/";
 
     const idEmp = useParams().id;
+
+    const hora = useRef();
+    const date = useRef();
 
     const [data, setData] = useState([]);
     const [dataEmp, setDataEmp] = useState({});
@@ -39,6 +44,15 @@ function Registries() {
     const [modalApagado, setModalApagado] = useState(false);
 
     const [searchText, setSearchText] = useState(null);
+
+    const [isValidData, setIsValidData] = useState(true);
+    const [isBlankData, setIsBlankData] = useState(true);
+
+    const [isValidHora, setIsValidHora] = useState(true);
+    const [isBlankHora, setIsBlankHora] = useState(true);
+
+    const [isBlankEntraSai, setIsBlankEntraSai] = useState(true);
+
 
     const [registoSelecionado, setRegistoSelecionado] = useState(
         {
@@ -62,6 +76,10 @@ function Registries() {
 
     const abrirFecharModalAdicionar = () => {
         setModalAdicionar(!modalAdicionar);
+        setRegistoSelecionado({
+            ...registoSelecionado, 
+            'employeeId': dataEmp.id
+        });
     }
 
     const abrirFecharModalEditar = () => {
@@ -97,14 +115,56 @@ function Registries() {
     }
 
     const handleChangeSelect = e => {
-        const { name, label, value } = e;
+        const { name, value } = e;
         setRegistoSelecionado({
             ...registoSelecionado, [name]: value
         });
         console.log(registoSelecionado);
+
+        const isBlankInput = value.trim() === '';
+        setIsBlankEntraSai(isBlankInput);
     }
 
-    const pedidoGet = async () => {
+    const handleChangeData = (event) => {
+        setRegistoSelecionado({
+            ...registoSelecionado, 
+            'dateTime': date.current.value+' '+hora.current.value+':00'
+        });
+        const value = event.target.value;
+        const isBlankInput = value.trim() === '';
+
+        const formattedDate = moment(value, 'DD-MM-YYYY').format('YYYY/MM/DD');
+        const isValidInput = moment(formattedDate).isValid();
+
+        setIsValidData(isBlankInput || isValidInput);
+        setIsBlankData(isBlankInput);
+    };
+
+    const handleChangeHora = (event) => {
+        setRegistoSelecionado({
+            ...registoSelecionado, 
+            'dateTime': date.current.value+' '+hora.current.value+':00'
+        });
+        const value = event.target.value;
+        const isBlankInput = value.trim() === '';
+
+        const formattedDate = moment(value, 'HH:mm').format('HH:mm');
+        const isValidInput = moment(formattedDate, 'HH:mm').isValid();
+
+        setIsValidHora(isBlankInput || isValidInput);
+        setIsBlankHora(isBlankInput);
+    };
+
+    const pedidoGetEmp = useCallback(async () => {
+        await axios.get(baseUrlEmp + idEmp)
+            .then(response => {
+                setDataEmp(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+    },[idEmp])
+
+    const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl + "employee/" + idEmp)
             .then(response => {
                 setData(response.data);
@@ -113,20 +173,16 @@ function Registries() {
                 console.log(error);
             })
         if (Object.keys(dataEmp).length === 0) pedidoGetEmp();
-    }
-
-    const pedidoGetEmp = async () => {
-        await axios.get(baseUrlEmp + idEmp)
-            .then(response => {
-                setDataEmp(response.data);
-            }).catch(error => {
-                console.log(error);
-            })
-    }
+    },[idEmp, dataEmp, pedidoGetEmp])    
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;
-        await axios.post(baseUrl + "manual/", registoSelecionado)
+        const formData = new FormData();
+        formData.append("dateTime", registoSelecionado.dateTime)
+        formData.append("type", registoSelecionado.type)
+        formData.append("employeeId", registoSelecionado.employeeId)
+        formData.append("employee", registoSelecionado.employeeId)
+        axios.post(baseUrl+'manual', formData)
             .then(response => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
@@ -149,6 +205,7 @@ function Registries() {
                         registo.employeeId = dados.employeeId;
                         registo.employee = dados.employeeId;
                     }
+                    return registo;
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
@@ -182,10 +239,7 @@ function Registries() {
         const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         return formattedDate;
     }
-
-    function getTipo(registo) {
-        return registo.type === 'E' ? 'Entrada' : 'Saída';
-    }
+    
 
     //impedir loop pedidoGet
     useEffect(() => {
@@ -193,7 +247,7 @@ function Registries() {
             pedidoGet();
             setUpdateData(false);
         }
-    }, [updateData])
+    }, [updateData, pedidoGet])
 
     return (
         <div className="empregados-container">
@@ -202,7 +256,7 @@ function Registries() {
             <div className="card" style={{ width: '500px', maxHeight: '200px' }}>
                 <div className="row no-gutters">
                     <div className="col-sm-5">
-                        <img className="card-img" src={dataEmp.image} />
+                        <img className="card-img" alt="" src={dataEmp.image} />
                     </div>
                     <div className="col-sm-7">
                         <div className="card-body">
@@ -242,11 +296,17 @@ function Registries() {
                 <ModalHeader>Adicionar Registo</ModalHeader>
                 <ModalBody>
                     <div className="form-group">
-                        <label>Data e Hora:</label>
+                        <label>Data:</label>{isBlankData && <span className="regularExp"> *</span>}
                         <br />
-                        <input type="dateTime" className="form-control" name="dateTime" onChange={handleChange} />
+                        <input ref={date} type="text" className="form-control" name="date" onChange={handleChangeData} />
+                        {!isValidData && <span className="regularExp">Insira uma data válida.</span>}
                         <br />
-                        <label>Entrada/Saída:</label>
+                        <label>Hora:</label>{isBlankHora && <span className="regularExp"> *</span>}
+                        <br />
+                        <input ref={hora} type="text" className="form-control" name="time" onChange={handleChangeHora} />
+                        {!isValidHora && <span className="regularExp">Insira uma Hora válida.</span>}
+                        <br />
+                        <label>Entrada/Saída:</label>{isBlankEntraSai && <span className="regularExp"> *</span>}
                         <br />
                         <Select
                             options={entrasaida}

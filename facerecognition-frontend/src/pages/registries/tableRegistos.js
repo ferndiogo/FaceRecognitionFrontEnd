@@ -44,7 +44,6 @@ function TableRegistos({ selecionarRegisto, registos, search }) {
         return (
             registos.map(registo => {
                 const date = new Date(registo.dateTime);
-                const aux = date.toDateString() === search.toDateString();
                 if (date.toDateString() === search.toDateString()) {
                     return (
                         <tr key={registo.id}>
