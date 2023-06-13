@@ -5,6 +5,8 @@ import Login from "./pages/login/login";
 import Home from "./pages/home";
 import Navbar from "./navbar/Navbar";
 import Registries from "./pages/registries/registries";
+import About from "./pages/about/about";
+
 
 function Rotas() {
     return (
@@ -16,6 +18,7 @@ function Rotas() {
                 <Route path="/Employees" element={<Employees />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Registries/:id" element={<Registries />} />
+                <Route path="/About" element={<About />} />
             </Routes>
         </BrowserRouter>
     );
