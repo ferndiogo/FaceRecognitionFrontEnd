@@ -5,7 +5,7 @@ export const navItems = [
   {
     id: 1,
     title: "Página Inicial",
-    path: "./home",
+    path: "./",
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faHouse} />,

@@ -358,6 +358,7 @@ function Employees() {
 
 
     const extrairData = (dateTimeString) => {
+
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
         const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
@@ -399,6 +400,7 @@ function Employees() {
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </form>
             </div>
+
             <div id="cards" className="cartoes">
                 <Cards empregados={data} search={searchText} selecionarEmpregado={selecionarEmpregado} />
             </div>
