@@ -16,12 +16,14 @@ import Select from 'react-select';
 import TableRegistos from './tableRegistos';
 import moment from 'moment';
 
+import { url } from '../../config';
+
 function Registries() {
-
-    const baseUrl = "https://192.168.1.1:7136/Registry/";
-    const baseUrlEmp = "https://192.168.1.1:7136/Employee/";
-    const baseUrlUser = "https://192.168.1.1:7136/Auth/";
-
+  
+    const baseUrl = url + "Registry/";
+    const baseUrlEmp = url + "Employee/";
+    const baseUrlUser = url + "Auth/";
+  
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
     const idEmp = useParams().id;
@@ -196,6 +198,7 @@ function Registries() {
                 processError(error);
             })
     }, [idEmp, processError])
+
 
     const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl + "employee/" + idEmp)

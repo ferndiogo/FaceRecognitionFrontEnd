@@ -15,10 +15,12 @@ import Cards from './cards';
 
 import moment from 'moment';
 
-function Employees() {
+import { url } from '../../config';
 
-    const baseUrl = "https://192.168.1.1:7136/Employee/";
-    const baseUrlUser = "https://192.168.1.1:7136/Auth/";
+function Employees() {
+  
+    const baseUrl = url + "Employee/";
+    const baseUrlUser = url + "Auth/";
 
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
@@ -410,8 +412,8 @@ function Employees() {
     //impedir loop pedidoGet
     useEffect(() => {
         if (updateData) {
-            pedidoGet();
-            setUpdateData(false);
+          pedidoGet();
+          setUpdateData(false);
         }
     }, [updateData, pedidoGet])
 
