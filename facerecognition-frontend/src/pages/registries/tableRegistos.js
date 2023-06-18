@@ -8,7 +8,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function TableRegistos({ selecionarRegisto, registos, search }) {
+function TableRegistos({ selecionarRegisto, registos, search, role }) {
 
     function getTipo(registo) {
         return registo.type === 'E' ? 'Entrada' : 'Saída';
@@ -34,8 +34,8 @@ function TableRegistos({ selecionarRegisto, registos, search }) {
                     <td>{extrairDataHora(registo.dateTime)}</td>
                     <td>{getTipo(registo)}</td>
                     <td>
-                        <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                        <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                        {(role === "Admin") && <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>}
+                        {(role === "Admin") && <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>}
                     </td>
                 </tr>
             ))
