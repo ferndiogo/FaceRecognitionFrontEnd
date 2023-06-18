@@ -192,6 +192,7 @@ function Registries() {
         await axios.get(baseUrlEmp + idEmp)
             .then(response => {
                 setDataEmp(response.data);
+                //console.log(response.data);
             }).catch(error => {
                 processError(error);
             })
@@ -201,7 +202,6 @@ function Registries() {
         await axios.get(baseUrl + "employee/" + idEmp)
             .then(response => {
                 setData(response.data);
-                setDataEmp(response.data[0].employee);
             }).catch(error => {
                 processError(error);
             })

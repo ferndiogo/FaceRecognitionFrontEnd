@@ -33,10 +33,10 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
                 <tr key={registo.id}>
                     <td>{extrairDataHora(registo.dateTime)}</td>
                     <td>{getTipo(registo)}</td>
-                    <td>
-                        {(role === "Admin") && <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>}
-                        {(role === "Admin") && <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>}
-                    </td>
+                    {(role === "Admin") && <td>
+                        <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                        <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                    </td>}
                 </tr>
             ))
         )
