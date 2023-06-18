@@ -18,12 +18,14 @@ import moment from 'moment';
 
 import { url } from '../../config';
 
+import { Card } from 'react-bootstrap';
+
 function Registries() {
-  
+
     const baseUrl = url + "Registry/";
     const baseUrlEmp = url + "Employee/";
     const baseUrlUser = url + "Auth/";
-  
+
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
     const idEmp = useParams().id;
@@ -301,22 +303,20 @@ function Registries() {
     return (
         <div className="empregados-container">
             <h2 className="titulo">Registos de Ponto</h2>
+            <h4 className="subtitulo">Funcionário</h4>
 
-            <div className="card" style={{ width: '500px', maxHeight: '200px' }}>
-                <div className="row no-gutters">
-                    <div className="col-sm-5">
-                        <img className="card-img" alt="" src={dataEmp.image} />
-                    </div>
-                    <div className="col-sm-7">
-                        <div className="card-body">
-                            <h5 className="card-title">{dataEmp.name}</h5>
-                            <p className="card-text">{dataEmp.email}<br />{dataEmp.contact}</p>
-                        </div>
-                    </div>
-                </div>
+            <div className="d-flex flex-wrap">
+                <Card className="mt-4 d-flex flex-row cardAllRegistry">
+                    <Card.Img variant="top" src={dataEmp.image} className="card-imageRegistry" />
+                    <Card.Body className="d-flex flex-column bodyCard">
+                        <Card.Title className='titleCard'>{dataEmp.name}</Card.Title>
+                        <Card.Text className='textCard'>{dataEmp.email}<br />{dataEmp.contact}</Card.Text>
+                    </Card.Body>
+                </Card>
             </div>
 
             <div className="barra">
+
                 {(dataRole === "Admin") && <div className="esquerda">
                     <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
                     <h5 className="addfunc">Adicionar Registo</h5>
@@ -324,16 +324,18 @@ function Registries() {
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>}
+
                 <div className="direita">
                     <input className="pesquisa" type="date" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch} />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </div>
+
             </div>
             <table className="table table-dark table-striped mt-4">
                 <thead>
                     <tr>
                         <th>Data e Hora</th>
-                        <th>Entrada/Saída</th>
+                        <th>Entrada Ou Saída</th>
                         {(dataRole === "Admin") && <th>Ações</th>}
                     </tr>
                 </thead>
