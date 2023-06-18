@@ -18,12 +18,17 @@ import moment from 'moment';
 import { url } from '../../config';
 
 function Employees() {
-
+  
     const baseUrl = url + "Employee/";
+    const baseUrlUser = url + "Auth/";
+
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
     const [data, setData] = useState([]);
+    const [dataRole, setDataRole] = useState('');
 
     const [updateData, setUpdateData] = useState(true);
+    const [updateDataRole, setUpdateDataRole] = useState(true);
 
     const [modalAdicionar, setModalAdicionar] = useState(false);
 
@@ -39,7 +44,10 @@ function Employees() {
 
     const [modalDetalhes, setModalDetalhes] = useState(false);
 
+    const [modalLoginInvalido, setModalLoginInvalido] = useState(false)
+
     const [searchText, setSearchText] = useState('');
+    const [textModalLogin, setTextModalLogin] = useState('');
 
     const [isValidName, setIsValidName] = useState(true);
     const [isBlankName, setIsBlankName] = useState(true);
@@ -122,6 +130,10 @@ function Employees() {
     const abrirFecharModalDetalhes = () => {
         setModalDetalhes(!modalDetalhes);
     }
+
+    const abrirFecharModalLoginInvalido = useCallback(() => {
+        setModalLoginInvalido(!modalLoginInvalido);
+      }, [setModalLoginInvalido, modalLoginInvalido]);
 
     const atualizar = () => {
         window.location.reload(false);
@@ -273,16 +285,34 @@ function Employees() {
         setIsBlankImage(false);
     }
 
+    const processError = useCallback((error) => {
+        if(error.response && (error.response.status === 401)){
+            abrirFecharModalLoginInvalido();                    
+            setTextModalLogin("Tem de iniciar sessão para aceder a esta página");                
+        }else if(error.response && (error.response.status === 403)){
+            abrirFecharModalLoginInvalido();                    
+            setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
+        }
+        console.log(error);
+    }, [abrirFecharModalLoginInvalido]);
+
+    const pedidoGetUserRole = useCallback(async () => {
+        try {
+          const response = await axios.get(baseUrlUser + "Roles");
+          setDataRole(response.data);
+        } catch (error) {
+          processError(error);
+        }
+      }, [baseUrlUser, setDataRole, processError]);
 
     const pedidoGet = useCallback(async () => {
-        await axios.get(baseUrl)
-          .then(response => {
-            setData(response.data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }, [baseUrl, setData]);
+        try {
+          const response = await axios.get(baseUrl);
+          setData(response.data);
+        } catch (error) {
+          processError(error);
+        }
+      }, [baseUrl, setData, processError]);
 
     const pedidoPost = async () => {
         delete empregadoSelecionado.id;
@@ -303,7 +333,7 @@ function Employees() {
                 abrirFecharModalAdicionar();
                 abrirFecharModalCriado();
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
     }
 
@@ -342,7 +372,7 @@ function Employees() {
                 abrirFecharModalEditado();
             })
             .catch(error => {
-                console.log(error);
+                processError(error);
             });
     }
 
@@ -355,7 +385,7 @@ function Employees() {
                 abrirFecharModalApagar();
                 abrirFecharModalApagado();
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
     }
 
@@ -385,19 +415,26 @@ function Employees() {
           pedidoGet();
           setUpdateData(false);
         }
-      }, [updateData, pedidoGet]);
+    }, [updateData, pedidoGet])
+
+    useEffect(() => {
+        if (updateDataRole) {
+            pedidoGetUserRole();
+            setUpdateDataRole(false);
+        }
+    }, [updateDataRole, pedidoGetUserRole])
 
     return (
         <div className="empregados-container">
             <h2 className="titulo">Funcionários</h2>
             <div className="barra">
-                <div className="esquerda">
+                {(dataRole === "Admin") && <div className="esquerda">
                     <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
                     <h5 className="addfunc">Adicionar Funcionário</h5>
                     <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
-                </div>
+                </div>}
                 <form className="direita">
                     <input id="search" className="pesquisa" type="search" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch} />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
@@ -645,9 +682,17 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btnInfo" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); resetBooleansEdit() }}>Editar</button>
-                    <button className="btnDanger" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>
+                    {(dataRole === "Admin") && <button className="btnInfo" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); resetBooleansEdit() }}>Editar</button>}
+                    {(dataRole === "Admin") && <button className="btnDanger" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>}
                     <button className="btnOk" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalLoginInvalido}>
+            <ModalHeader>Não Autorizado</ModalHeader>
+                <ModalBody>{textModalLogin}</ModalBody>
+                <ModalFooter>
+                    <button className="btnDanger" onClick={() => { window.location.href = '/login'; }}>Iniciar Sessão</button>
                 </ModalFooter>
             </Modal>
 

@@ -19,9 +19,12 @@ import moment from 'moment';
 import { url } from '../../config';
 
 function Registries() {
-
+  
     const baseUrl = url + "Registry/";
     const baseUrlEmp = url + "Employee/";
+    const baseUrlUser = url + "Auth/";
+  
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
     const idEmp = useParams().id;
 
@@ -30,8 +33,11 @@ function Registries() {
 
     const [data, setData] = useState([]);
     const [dataEmp, setDataEmp] = useState({});
+    const [dataRole, setDataRole] = useState('');
 
     const [updateData, setUpdateData] = useState(true);
+    const [updateDataEmp, setUpdateDataEmp] = useState(true);
+    const [updateDataRole, setUpdateDataRole] = useState(true);
 
     const [modalAdicionar, setModalAdicionar] = useState(false);
 
@@ -45,7 +51,10 @@ function Registries() {
 
     const [modalApagado, setModalApagado] = useState(false);
 
+    const [modalLoginInvalido, setModalLoginInvalido] = useState(false)
+
     const [searchText, setSearchText] = useState(null);
+    const [textModalLogin, setTextModalLogin] = useState('');
 
     const [isValidData, setIsValidData] = useState(true);
     const [isBlankData, setIsBlankData] = useState(true);
@@ -79,7 +88,7 @@ function Registries() {
     const abrirFecharModalAdicionar = () => {
         setModalAdicionar(!modalAdicionar);
         setRegistoSelecionado({
-            ...registoSelecionado, 
+            ...registoSelecionado,
             'employeeId': dataEmp.id
         });
     }
@@ -103,6 +112,10 @@ function Registries() {
     const abrirFecharModalApagado = () => {
         setModalApagado(!modalApagado);
     }
+
+    const abrirFecharModalLoginInvalido = useCallback(() => {
+        setModalLoginInvalido(!modalLoginInvalido);
+    }, [setModalLoginInvalido, modalLoginInvalido]);
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -129,8 +142,8 @@ function Registries() {
 
     const handleChangeData = (event) => {
         setRegistoSelecionado({
-            ...registoSelecionado, 
-            'dateTime': date.current.value+' '+hora.current.value+':00'
+            ...registoSelecionado,
+            'dateTime': date.current.value + ' ' + hora.current.value + ':00'
         });
         const value = event.target.value;
         const isBlankInput = value.trim() === '';
@@ -144,8 +157,8 @@ function Registries() {
 
     const handleChangeHora = (event) => {
         setRegistoSelecionado({
-            ...registoSelecionado, 
-            'dateTime': date.current.value+' '+hora.current.value+':00'
+            ...registoSelecionado,
+            'dateTime': date.current.value + ' ' + hora.current.value + ':00'
         });
         const value = event.target.value;
         const isBlankInput = value.trim() === '';
@@ -157,14 +170,35 @@ function Registries() {
         setIsBlankHora(isBlankInput);
     };
 
+    const processError = useCallback((error) => {
+        if (error.response && (error.response.status === 401)) {
+            abrirFecharModalLoginInvalido();
+            setTextModalLogin("Tem de iniciar sessão para aceder a esta página");
+        } else if (error.response && (error.response.status === 403)) {
+            abrirFecharModalLoginInvalido();
+            setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
+        }
+        console.log(error);
+    }, [abrirFecharModalLoginInvalido]);
+
+    const pedidoGetUserRole = useCallback(async () => {
+        try {
+            const response = await axios.get(baseUrlUser + "Roles");
+            setDataRole(response.data);
+        } catch (error) {
+            processError(error);
+        }
+    }, [baseUrlUser, setDataRole, processError]);
+
     const pedidoGetEmp = useCallback(async () => {
         await axios.get(baseUrlEmp + idEmp)
             .then(response => {
                 setDataEmp(response.data);
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
-    },[idEmp, baseUrlEmp])
+    }, [idEmp, processError])
+
 
     const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl + "employee/" + idEmp)
@@ -172,10 +206,9 @@ function Registries() {
                 setData(response.data);
                 setDataEmp(response.data[0].employee);
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
-        if (Object.keys(dataEmp).length === 0) pedidoGetEmp();
-    },[idEmp, dataEmp, pedidoGetEmp, baseUrl])    
+    }, [idEmp, processError])
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;
@@ -184,14 +217,14 @@ function Registries() {
         formData.append("type", registoSelecionado.type)
         formData.append("employeeId", registoSelecionado.employeeId)
         formData.append("employee", registoSelecionado.employeeId)
-        axios.post(baseUrl+'manual', formData)
+        axios.post(baseUrl + 'manual', formData)
             .then(response => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
                 abrirFecharModalAdicionar();
                 abrirFecharModalCriado();
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
     }
 
@@ -213,7 +246,7 @@ function Registries() {
                 abrirFecharModalEditar();
                 abrirFecharModalEditado();
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
     }
 
@@ -225,7 +258,7 @@ function Registries() {
                 abrirFecharModalApagar();
                 abrirFecharModalApagado();
             }).catch(error => {
-                console.log(error);
+                processError(error);
             })
     }
 
@@ -241,7 +274,7 @@ function Registries() {
         const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         return formattedDate;
     }
-    
+
 
     //impedir loop pedidoGet
     useEffect(() => {
@@ -250,6 +283,20 @@ function Registries() {
             setUpdateData(false);
         }
     }, [updateData, pedidoGet])
+
+    useEffect(() => {
+        if (updateDataRole) {
+            pedidoGetUserRole();
+            setUpdateDataRole(false);
+        }
+    }, [updateDataRole, pedidoGetUserRole])
+
+    useEffect(() => {
+        if (updateDataEmp) {
+            pedidoGetEmp();
+            setUpdateDataEmp(false);
+        }
+    }, [updateDataEmp, pedidoGetEmp])
 
     return (
         <div className="empregados-container">
@@ -270,13 +317,13 @@ function Registries() {
             </div>
 
             <div className="barra">
-                <div className="esquerda">
+                {(dataRole === "Admin") && <div className="esquerda">
                     <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
                     <h5 className="addfunc">Adicionar Registo</h5>
                     <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
-                </div>
+                </div>}
                 <div className="direita">
                     <input className="pesquisa" type="date" placeholder="Pesquisar" name="pesquisa" aria-label="Pesquisar" onChange={handleChangeSearch} />
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
@@ -287,11 +334,11 @@ function Registries() {
                     <tr>
                         <th>Data e Hora</th>
                         <th>Entrada/Saída</th>
-                        <th>Ações</th>
+                        {(dataRole === "Admin") && <th>Ações</th>}
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRegistos selecionarRegisto={selecionarRegisto} registos={data} search={searchText} />
+                    <TableRegistos selecionarRegisto={selecionarRegisto} registos={data} search={searchText} role={dataRole} />
                 </tbody>
             </table>
             <Modal isOpen={modalAdicionar}>
@@ -396,7 +443,13 @@ function Registries() {
                 </ModalFooter>
             </Modal>
 
-
+            <Modal isOpen={modalLoginInvalido}>
+                <ModalHeader>Não Autorizado</ModalHeader>
+                <ModalBody>{textModalLogin}</ModalBody>
+                <ModalFooter>
+                    <button className="btnDanger" onClick={() => { window.location.href = '/login'; }}>Iniciar Sessão</button>
+                </ModalFooter>
+            </Modal>
 
         </div>
     );
