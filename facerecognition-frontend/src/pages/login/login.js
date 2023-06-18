@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './styles.css';
+import { url } from '../../config';
 
 const Login = () => {
 
-    const baseUrl = "https://localhost:7136/Auth/login";
+    const baseUrl = url + "Auth/login";
 
     const [data, setData] = useState([]);
 

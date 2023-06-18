@@ -16,10 +16,12 @@ import Select from 'react-select';
 import TableRegistos from './tableRegistos';
 import moment from 'moment';
 
+import { url } from '../../config';
+
 function Registries() {
 
-    const baseUrl = "https://192.168.1.1:7136/Registry/";
-    const baseUrlEmp = "https://192.168.1.1:7136/Employee/";
+    const baseUrl = url + "Registry/";
+    const baseUrlEmp = url + "Employee/";
 
     const idEmp = useParams().id;
 
@@ -162,7 +164,7 @@ function Registries() {
             }).catch(error => {
                 console.log(error);
             })
-    },[idEmp])
+    },[idEmp, baseUrlEmp])
 
     const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl + "employee/" + idEmp)
@@ -173,7 +175,7 @@ function Registries() {
                 console.log(error);
             })
         if (Object.keys(dataEmp).length === 0) pedidoGetEmp();
-    },[idEmp, dataEmp, pedidoGetEmp])    
+    },[idEmp, dataEmp, pedidoGetEmp, baseUrl])    
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,9 +15,11 @@ import Cards from './cards';
 
 import moment from 'moment';
 
+import { url } from '../../config';
+
 function Employees() {
 
-    const baseUrl = "https://192.168.1.1:7136/Employee/";
+    const baseUrl = url + "Employee/";
 
     const [data, setData] = useState([]);
 
@@ -272,14 +274,15 @@ function Employees() {
     }
 
 
-    const pedidoGet = async () => {
+    const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl)
-            .then(response => {
-                setData(response.data);
-            }).catch(error => {
-                console.log(error);
-            })
-    }
+          .then(response => {
+            setData(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }, [baseUrl, setData]);
 
     const pedidoPost = async () => {
         delete empregadoSelecionado.id;
@@ -379,10 +382,10 @@ function Employees() {
     //impedir loop pedidoGet
     useEffect(() => {
         if (updateData) {
-            pedidoGet();
-            setUpdateData(false);
+          pedidoGet();
+          setUpdateData(false);
         }
-    }, [updateData])
+      }, [updateData, pedidoGet]);
 
     return (
         <div className="empregados-container">
