@@ -21,14 +21,14 @@ function Cards({ empregados, search, selecionarEmpregado }) {
                         <Card.Title>{empregado.name}</Card.Title>
                         <Card.Text>
                             {empregado.email}
-                            <div className='btnsCenter'>
+                            <span className='btnsCenter'>
                                 <Link to={`../Registries/${empregado.id}`} style={{ fontSize: '1rem' }} className="btnInfo">
                                     <FontAwesomeIcon icon={faPlus} /> Registos
                                 </Link>
                                 <button onClick={() => selecionarEmpregado(empregado, "Detalhes")} style={{ fontSize: '1rem' }} className="btn">
                                     <FontAwesomeIcon icon={faPlus} /> Ver mais
                                 </button>
-                            </div>
+                            </span>
                         </Card.Text>
                     </Card.Body>
                 </Card>
