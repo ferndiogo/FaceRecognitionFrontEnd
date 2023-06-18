@@ -7,6 +7,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
+import { url } from '../../config';
 
 function Camera() {
   const webcamRef = useRef(null);
@@ -17,7 +18,7 @@ function Camera() {
 
   const [modalAdicionado, setModalAdicionado] = useState(false);
 
-  const baseUrl = "https://localhost:7136/Registry/";
+  const baseUrl = url + "Registry/";
 
   const [data, setData] = useState([]);
 
