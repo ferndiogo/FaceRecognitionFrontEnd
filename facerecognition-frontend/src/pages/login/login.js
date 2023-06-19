@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './styles.css';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 const Login = () => {
 
     const baseUrl = "https://localhost:7136/Auth/login";
 
-    const [data, setData] = useState([]);
+    const [txtErrorPassword, setTxtErrorPassword] = useState('');
+    const [txtErrorUsername, setTxtErrorUsername] = useState('');
+
+    const [modalLoginSucesso, setModalLoginSucesso] = useState(false);
 
     const [utilizadorSelecionado, setUtilizadorSelecionado] = useState(
         {
@@ -33,25 +37,43 @@ const Login = () => {
                 'Content-Type': 'text/plain'
             }
         }).then(response => {
-            setData(data.concat(response.data));
             // Armazenar o token no local storage
             localStorage.setItem('token', 'Bearer ' + response.data);
+            setModalLoginSucesso(true);
         }).catch(error => {
+            if (error.response.data === "Utilizador não encontrado.") {
+                setTxtErrorUsername(error.response.data);
+                setTxtErrorPassword('');
+            } else {
+                setTxtErrorPassword(error.response.data);
+                setTxtErrorUsername('');
+            }
             console.log(error);
         })
     }
     return (
-        <div className="login-container">
-            <h2 className="titulo-login">Iniciar Sessão</h2>
-            <form className="login-form">
-                <label className="lbl">Username:</label>
-                <input type="text" className="form-control" name="username" onChange={handleChange} />
-                <label className="lbl">Password:</label>
-                <input type="password" className="form-control" name="password" onChange={handleChange} />
-            </form>
-            <div className="login-btn">
-                <button className="btn-login" onClick={() => pedidoPost()}>Login</button>
+        <div>
+            <div className="login-container">
+                <h2 className="titulo-login">Iniciar Sessão</h2>
+                <form className="login-form">
+                    <label className="lbl">Username:</label>
+                    <input type="text" className="form-control" name="username" onChange={handleChange} />
+                    <p className="regularExp">{txtErrorUsername}</p>
+                    <label className="lbl">Password:</label>
+                    <input type="password" className="form-control" name="password" onChange={handleChange} />
+                    <p className="regularExp">{txtErrorPassword}</p>
+                </form>
+                <div className="login-btn">
+                    <button className="btn-login" onClick={() => pedidoPost()}>Login</button>
+                </div>
             </div>
+
+            <Modal isOpen={modalLoginSucesso}>
+                <ModalBody>Iniciar sessão bem sucedido!</ModalBody>
+                <ModalFooter>
+                    <button className="btnInfo" onClick={() => { window.location.href = '/'; }}>Página Inicial</button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 };
