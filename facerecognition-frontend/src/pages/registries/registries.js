@@ -31,7 +31,9 @@ function Registries() {
     const idEmp = useParams().id;
 
     const hora = useRef();
+    const horaEdit = useRef();
     const date = useRef();
+    const dateEdit = useRef();
 
     const [data, setData] = useState([]);
     const [dataEmp, setDataEmp] = useState({});
@@ -42,30 +44,21 @@ function Registries() {
     const [updateDataRole, setUpdateDataRole] = useState(true);
 
     const [modalAdicionar, setModalAdicionar] = useState(false);
-
     const [modalEditar, setModalEditar] = useState(false);
-
     const [modalApagar, setModalApagar] = useState(false);
-
     const [modalCriado, setModalCriado] = useState(false);
-
     const [modalEditado, setModalEditado] = useState(false);
-
     const [modalApagado, setModalApagado] = useState(false);
-
-    const [modalLoginInvalido, setModalLoginInvalido] = useState(false)
+    const [modalLoginInvalido, setModalLoginInvalido] = useState(false);
 
     const [searchText, setSearchText] = useState(null);
     const [textModalLogin, setTextModalLogin] = useState('');
 
     const [isValidData, setIsValidData] = useState(true);
     const [isBlankData, setIsBlankData] = useState(true);
-
     const [isValidHora, setIsValidHora] = useState(true);
     const [isBlankHora, setIsBlankHora] = useState(true);
-
     const [isBlankEntraSai, setIsBlankEntraSai] = useState(true);
-
 
     const [registoSelecionado, setRegistoSelecionado] = useState(
         {
@@ -83,11 +76,17 @@ function Registries() {
 
     const selecionarRegisto = (registo, opcao) => {
         setRegistoSelecionado(registo);
-        (opcao === "Editar") ?
-            abrirFecharModalEditar() : abrirFecharModalApagar();
+        if (opcao === "Editar") {
+            abrirFecharModalEditar();
+        }
+        else {
+            abrirFecharModalApagar();
+        }
+
     }
 
     const abrirFecharModalAdicionar = () => {
+        resetBooleansAdd();
         setModalAdicionar(!modalAdicionar);
         setRegistoSelecionado({
             ...registoSelecionado,
@@ -96,6 +95,7 @@ function Registries() {
     }
 
     const abrirFecharModalEditar = () => {
+        resetBooleansEdit();
         setModalEditar(!modalEditar);
     }
 
@@ -128,7 +128,11 @@ function Registries() {
     }
 
     const handleChangeSearch = e => {
-        setSearchText(new Date(e.target.value));
+        if (e.target.value !== "") {
+            setSearchText(new Date(e.target.value));
+        }else{
+            setSearchText(null);
+        }
     }
 
     const handleChangeSelect = e => {
@@ -143,10 +147,17 @@ function Registries() {
     }
 
     const handleChangeData = (event) => {
-        setRegistoSelecionado({
-            ...registoSelecionado,
-            'dateTime': date.current.value + ' ' + hora.current.value + ':00'
-        });
+        if (modalAdicionar) {
+            setRegistoSelecionado({
+                ...registoSelecionado,
+                'dateTime': date.current.value + ' ' + hora.current.value + ':00'
+            });
+        } else {
+            setRegistoSelecionado({
+                ...registoSelecionado,
+                'dateTime': dateEdit.current.value + ' ' + horaEdit.current.value + ':00'
+            });
+        }
         const value = event.target.value;
         const isBlankInput = value.trim() === '';
 
@@ -158,10 +169,17 @@ function Registries() {
     };
 
     const handleChangeHora = (event) => {
-        setRegistoSelecionado({
-            ...registoSelecionado,
-            'dateTime': date.current.value + ' ' + hora.current.value + ':00'
-        });
+        if (modalAdicionar) {
+            setRegistoSelecionado({
+                ...registoSelecionado,
+                'dateTime': date.current.value + ' ' + hora.current.value + ':00'
+            });
+        } else {
+            setRegistoSelecionado({
+                ...registoSelecionado,
+                'dateTime': dateEdit.current.value + ' ' + horaEdit.current.value + ':00'
+            });
+        }
         const value = event.target.value;
         const isBlankInput = value.trim() === '';
 
@@ -200,7 +218,7 @@ function Registries() {
             }).catch(error => {
                 processError(error);
             })
-    }, [idEmp, processError])
+    }, [idEmp, processError, baseUrlEmp])
 
 
     const pedidoGet = useCallback(async () => {
@@ -210,15 +228,14 @@ function Registries() {
             }).catch(error => {
                 processError(error);
             })
-    }, [idEmp, processError])
+    }, [idEmp, processError, baseUrl])
 
     const pedidoPost = async () => {
         delete registoSelecionado.id;
         const formData = new FormData();
-        formData.append("dateTime", registoSelecionado.dateTime)
-        formData.append("type", registoSelecionado.type)
-        formData.append("employeeId", registoSelecionado.employeeId)
-        formData.append("employee", registoSelecionado.employeeId)
+        formData.append("dateTime", registoSelecionado.dateTime);
+        formData.append("type", registoSelecionado.type);
+        formData.append("employeeId", registoSelecionado.employeeId);
         axios.post(baseUrl + 'manual', formData)
             .then(response => {
                 setData(data.concat(response.data));
@@ -231,7 +248,12 @@ function Registries() {
     }
 
     const pedidoPut = async () => {
-        await axios.put(baseUrl + registoSelecionado.id, registoSelecionado)
+        const formData = new FormData();
+        formData.append('id', registoSelecionado.id)
+        formData.append("dateTime", registoSelecionado.dateTime);
+        formData.append("type", registoSelecionado.type);
+        formData.append("employeeId", registoSelecionado.employeeId);
+        await axios.put(baseUrl + registoSelecionado.id, formData)
             .then(response => {
                 var dados = response.data;
                 var dadosAux = data;
@@ -264,7 +286,7 @@ function Registries() {
             })
     }
 
-    function extrairDataHora(dateTimeString) {
+    const extrairDataHora = (dateTimeString) => {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
         const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
@@ -275,6 +297,39 @@ function Registries() {
 
         const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         return formattedDate;
+    }
+
+    const resetBooleansAdd = () => {
+        setIsValidData(true);
+        setIsBlankData(true);
+        setIsValidHora(true);
+        setIsBlankHora(true);
+        setIsBlankEntraSai(true);
+    }
+
+    const resetBooleansEdit = () => {
+        setIsValidData(true);
+        setIsBlankData(false);
+        setIsValidHora(true);
+        setIsBlankHora(false);
+        setIsBlankEntraSai(false);
+    }
+
+    const dataHora = (str) => {
+        const aux = new Date(registoSelecionado.dateTime);
+        const dia = aux.getDate();
+        const mes = aux.getMonth() + 1;
+        const ano = aux.getFullYear();
+        const horas = aux.getHours();
+        const minutos = aux.getMinutes();
+        const dataAux = dia + '/' + mes + '/' + ano;
+        const horaAux = horas + ':' + minutos;
+
+        if (str === 'data') {
+            return dataAux
+        } else {
+            return horaAux
+        }
     }
 
 
@@ -347,17 +402,20 @@ function Registries() {
                 <ModalHeader>Adicionar Registo</ModalHeader>
                 <ModalBody>
                     <div className="form-group">
-                        <label>Data:</label>{isBlankData && <span className="regularExp"> *</span>}
+                        <label>Data:</label>
+                        {isBlankData && <span className="regularExp"> *</span>}
                         <br />
                         <input ref={date} type="text" className="form-control" name="date" onChange={handleChangeData} />
-                        {!isValidData && <span className="regularExp">Insira uma data válida.</span>}
+                        {!isValidData && <span className="regularExp">Insira uma data válida. Exemplo: 12/3/2023</span>}
                         <br />
-                        <label>Hora:</label>{isBlankHora && <span className="regularExp"> *</span>}
+                        <label>Hora:</label>
+                        {isBlankHora && <span className="regularExp"> *</span>}
                         <br />
                         <input ref={hora} type="text" className="form-control" name="time" onChange={handleChangeHora} />
-                        {!isValidHora && <span className="regularExp">Insira uma Hora válida.</span>}
+                        {!isValidHora && <span className="regularExp">Insira uma Hora válida. Exemplo: 12:34</span>}
                         <br />
-                        <label>Entrada/Saída:</label>{isBlankEntraSai && <span className="regularExp"> *</span>}
+                        <label>Entrada/Saída:</label>
+                        {isBlankEntraSai && <span className="regularExp"> *</span>}
                         <br />
                         <Select
                             options={entrasaida}
@@ -365,9 +423,9 @@ function Registries() {
                             placeholder="Selecione uma opção"
                         />
                         <br />
-                        <label>ID Empregado:</label>
+                        <label>Nome do Empregado:</label>
                         <br />
-                        <input readOnly={true} value={dataEmp.id} type="text" className="form-control" name="employeeId" onChange={handleChange} />
+                        <input readOnly={true} value={dataEmp.name} type="text" className="form-control" name="employeeId" onChange={handleChange} />
                     </div>
                 </ModalBody>
                 <ModalFooter>
@@ -380,12 +438,20 @@ function Registries() {
                 <ModalHeader>Editar Registo</ModalHeader>
                 <ModalBody>
                     <div className="form-group">
-                        <label>Data e Hora:</label>
+                        <label>Data:</label>
+                        {isBlankData && <span className="regularExp"> *</span>}
                         <br />
-                        <input type="dateTime" className="form-control" name="dateTime" onChange={handleChange}
-                            value={registoSelecionado && registoSelecionado.dateTime} />
+                        <input ref={dateEdit} type="text" className="form-control" name="date" onChange={handleChangeData} defaultValue={dataHora('data')} />
+                        {!isValidData && <span className="regularExp">Insira uma data válida. Exemplo: 12/3/2023</span>}
+                        <br />
+                        <label>Hora:</label>
+                        {isBlankHora && <span className="regularExp"> *</span>}
+                        <br />
+                        <input ref={horaEdit} type="text" className="form-control" name="time" onChange={handleChangeHora} defaultValue={dataHora('hora')} />
+                        {!isValidHora && <span className="regularExp">Insira uma Hora válida. Exemplo: 12:34</span>}
                         <br />
                         <label>Entrada/Saída:</label>
+                        {isBlankEntraSai && <span className="regularExp"> *</span>}
                         <br />
                         <Select
                             options={entrasaida}
