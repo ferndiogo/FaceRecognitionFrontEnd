@@ -17,7 +17,7 @@ import TableRegistos from './tableRegistos';
 import moment from 'moment';
 
 import { url } from '../../config';
-
+import { Link } from "react-router-dom";
 import { Card } from 'react-bootstrap';
 
 function Registries() {
@@ -515,7 +515,7 @@ function Registries() {
                 <ModalHeader>Não Autorizado</ModalHeader>
                 <ModalBody>{textModalLogin}</ModalBody>
                 <ModalFooter>
-                    <button className="btnDanger" onClick={() => { window.location.href = '/login'; }}>Iniciar Sessão</button>
+                <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
                 </ModalFooter>
             </Modal>
 
