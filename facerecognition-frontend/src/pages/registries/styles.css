@@ -37,3 +37,50 @@ td {
 .bcontent {
   margin-top: 10px;
 }
+
+.card-imageRegistry {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.cardAllRegistry {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px !important;
+  overflow: hidden;
+  width: 400px;
+  height: 200px;
+  text-align: center;
+  margin: auto;
+}
+
+.titleCard {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.textCard {
+  margin-bottom: 0.5rem;
+}
+
+.bodyCard{
+  margin: auto;
+}
+
+.subtitulo{
+  text-align: center;
+  color: #ffffff;
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 900px) {
+
+  .cardAllRegistry{
+    width: 320px;
+  }
+
+}

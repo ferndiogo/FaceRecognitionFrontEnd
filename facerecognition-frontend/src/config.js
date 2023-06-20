@@ -1,1 +1,1 @@
-export const url = "https://localhost:7136/";
+export const url = "https://rekognitionapi.azurewebsites.net/";
