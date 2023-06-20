@@ -130,7 +130,7 @@ function Camera() {
               </ModalBody>
               <ModalFooter>
                 <button className="btn" onClick={enviarImagem}>Enviar</button>
-                <button className="btn1" onClick={closeModal}>Cancelar</button>
+                <button className="btnDanger" onClick={closeModal}>Cancelar</button>
               </ModalFooter>
             </Modal>
 
