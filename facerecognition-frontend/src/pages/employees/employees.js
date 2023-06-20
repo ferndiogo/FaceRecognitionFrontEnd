@@ -17,6 +17,7 @@ import { url } from '../../config';
 import { Link } from "react-router-dom";
 
 function Employees() {
+  
 
     const baseUrl = url + "Employee/";
     const baseUrlUser = url + "Auth/";
@@ -398,6 +399,7 @@ function Employees() {
 
 
     const extrairData = (dateTimeString) => {
+
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
         const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
@@ -418,8 +420,8 @@ function Employees() {
     //impedir loop pedidoGet
     useEffect(() => {
         if (updateData) {
-            pedidoGet();
-            setUpdateData(false);
+          pedidoGet();
+          setUpdateData(false);
         }
     }, [updateData, pedidoGet])
 
@@ -446,6 +448,7 @@ function Employees() {
                     <button className="btn" type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
                 </form>
             </div>
+
             <div id="cards" className="cartoes">
                 <Cards empregados={data} search={searchText} selecionarEmpregado={selecionarEmpregado} />
             </div>

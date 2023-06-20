@@ -1,8 +1,8 @@
 import React from 'react';
 import './style.css';
-import Camera from "./camera";
+import Camera from "../home/cameraWeb";
 
-const Index = () => {
+const HomeWeb = () => {
   return (
     <div className="home-page">
       <h1>Captura de Imagem</h1>
@@ -11,4 +11,4 @@ const Index = () => {
   );
 }
 
-export default Index;
+export default HomeWeb;

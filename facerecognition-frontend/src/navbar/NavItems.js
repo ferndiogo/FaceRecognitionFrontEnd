@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faPeopleGroup, faDatabase, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faPeopleGroup, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 export const navItems = [
   {
@@ -20,16 +20,8 @@ export const navItems = [
   },
   {
     id: 3,
-    title: "Registos",
-    path: "./",
-    nName: "nav-item",
-    sName: "sidebar-item",
-    icon: <FontAwesomeIcon icon={faDatabase} />,
-  },
-  {
-    id: 4,
     title: "Sobre",
-    path: "./",
+    path: "./about",
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faCircleInfo} />,
