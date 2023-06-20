@@ -6,6 +6,8 @@ import Home from "./pages/home";
 import Navbar from "./navbar/Navbar";
 import Registries from "./pages/registries/registries";
 import About from "./pages/about/about";
+import NewAccount from "./pages/accounts/newAccount";
+import Accounts from "./pages/accounts/accounts";
 
 
 function Rotas() {
@@ -18,6 +20,8 @@ function Rotas() {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Registries/:id" element={<Registries />} />
                 <Route path="/About" element={<About />} />
+                <Route path="/NewAccount" element={<NewAccount />} />
+                <Route path='/Accounts' element={<Accounts />} />
             </Routes>
         </HashRouter>
     );
