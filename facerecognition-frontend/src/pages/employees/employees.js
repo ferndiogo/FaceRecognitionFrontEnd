@@ -616,7 +616,7 @@ function Employees() {
                     <div>Os dados do funcionário que introduziu foram adicionados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -626,7 +626,7 @@ function Employees() {
                     <div>Os dados do funcionário foram editados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => { abrirFecharModalEditado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => { abrirFecharModalEditado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -636,7 +636,7 @@ function Employees() {
                     <div>O funcionário selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => { abrirFecharModalApagado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOK" onClick={() => { abrirFecharModalApagado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 

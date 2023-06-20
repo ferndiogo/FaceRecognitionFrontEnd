@@ -32,6 +32,7 @@ th,
 td {
   max-width: 300px;
   text-align: center;
+  vertical-align: middle;
 }
 
 .bcontent {
@@ -75,6 +76,17 @@ td {
   text-align: center;
   color: #ffffff;
   margin-top: 30px;
+}
+
+.tableR {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableBtn {
+  width: 48px;
+  height: 36px;
 }
 
 @media screen and (max-width: 900px) {

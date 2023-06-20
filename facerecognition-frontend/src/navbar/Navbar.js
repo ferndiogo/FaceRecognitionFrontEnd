@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import * as Icons from "react-icons/fa";
 import "./Navbar.css";
-import Button from "./Button";
+import "./Button.css";
 import { navItems } from "./NavItems.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +55,7 @@ function Navbar() {
             })}
           </ul>
         )}
-        {!mobile && <Button />}
+        {!mobile}
 
         {mobile && (
           <div className="sidebar-toggle">
@@ -91,7 +91,6 @@ function Navbar() {
             );
           })}
         </ul>
-        <Button onClick={() => setSidebar(false)} />
       </div>
     </>
   );

@@ -119,7 +119,7 @@ function Camera() {
                 <img className="imagem" src={capturedImage} alt="Imagem Capturada" />
               </ModalBody>
               <ModalFooter>
-                <button className="btn" onClick={enviarImagem}>
+                <button className="btnOk" onClick={enviarImagem}>
                   Enviar
                 </button>
                 <button className="btnDanger" onClick={closeModal}>
@@ -134,7 +134,7 @@ function Camera() {
                 <div>O registo foi adicionado com sucesso!</div>
               </ModalBody>
               <ModalFooter>
-                <button className="btn" onClick={abrirFecharModalAdicionado}>
+                <button className="btnOk" onClick={abrirFecharModalAdicionado}>
                   <FontAwesomeIcon icon={faCheck} />
                 </button>
               </ModalFooter>

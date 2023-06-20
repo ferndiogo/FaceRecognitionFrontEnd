@@ -163,7 +163,7 @@ const Accounts = () => {
                 <ModalHeader>Não Autorizado</ModalHeader>
                 <ModalBody>{textModalLogin}</ModalBody>
                 <ModalFooter>
-                    <button className="btnDanger" onClick={() => { window.location.href = '/login'; }}>Iniciar Sessão</button>
+                <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
                 </ModalFooter>
             </Modal>
 
@@ -187,8 +187,8 @@ const Accounts = () => {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoPut()}>Editar</button>
-                    <button className="btn1" onClick={() => setModalEditar(false)}>Cancelar</button>
+                    <button className="btnOk" onClick={() => pedidoPut()}>Editar</button>
+                    <button className="btnDanger" onClick={() => setModalEditar(false)}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -197,8 +197,8 @@ const Accounts = () => {
                     Confirma a eliminação deste utilizador com username:<b>{userSelecionado.username}</b> ?
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoDelete()}>Sim</button>
-                    <button className="btn1" onClick={() => setModalApagar(false)}>Não</button>
+                    <button className="btnOk" onClick={() => pedidoDelete()}>Sim</button>
+                    <button className="btnDanger" onClick={() => setModalApagar(false)}>Não</button>
                 </ModalFooter>
             </Modal>
 
@@ -208,7 +208,7 @@ const Accounts = () => {
                     <div>O registo foi modificado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => setModalEditado(false)}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => setModalEditado(false)}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -218,7 +218,7 @@ const Accounts = () => {
                     <div>O registo selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => setModalApagado(false)}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => setModalApagado(false)}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
         </div>
