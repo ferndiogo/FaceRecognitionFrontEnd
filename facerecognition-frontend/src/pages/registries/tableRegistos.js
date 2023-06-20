@@ -33,10 +33,12 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
                 <tr key={registo.id}>
                     <td>{extrairDataHora(registo.dateTime)}</td>
                     <td>{getTipo(registo)}</td>
-                    <td>
-                        {(role === "Admin") && <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>}
-                        {(role === "Admin") && <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>}
-                    </td>
+                    {(role === "Admin") && <td>
+                        <div className="d-inline-flex">
+                            <button className="btn btn-primary me-2" style={{ backgroundColor: '#267c70' }} onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                            <button className="btn btn-danger" style={{ backgroundColor: '#8B0000' }} onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                        </div>
+                    </td>}
                 </tr>
             ))
         )
@@ -49,14 +51,16 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
                         <tr key={registo.id}>
                             <td>{extrairDataHora(registo.dateTime)}</td>
                             <td>{getTipo(registo)}</td>
-                            <td>
-                                <button className="btn btn-primary" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                                <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
-                            </td>
+                            {(role === "Admin") && <td>
+                                <div className="d-inline-flex">
+                                    <button className="btn btn-primary me-2" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                                    <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                                </div>
+                            </td>}
                         </tr>
                     );
                 } else {
-                    return null; // Retorne null se o registo não corresponder à pesquisa
+                    return null; 
                 }
             })
         )
