@@ -12,13 +12,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Select from 'react-select';
 import Cards from './cards';
-
 import moment from 'moment';
-
 import { url } from '../../config';
+import { Link } from "react-router-dom";
 
 function Employees() {
   
+
     const baseUrl = url + "Employee/";
     const baseUrlUser = url + "Auth/";
 
@@ -133,7 +133,7 @@ function Employees() {
 
     const abrirFecharModalLoginInvalido = useCallback(() => {
         setModalLoginInvalido(!modalLoginInvalido);
-      }, [setModalLoginInvalido, modalLoginInvalido]);
+    }, [setModalLoginInvalido, modalLoginInvalido]);
 
     const atualizar = () => {
         window.location.reload(false);
@@ -219,6 +219,7 @@ function Employees() {
         const dateToCheck = event.target.value;
         const formattedDate = moment(dateToCheck, 'DD/MM/YYYY').format('YYYY/MM/DD');
         const isValidInput = moment(formattedDate).isValid();
+        console.log(formattedDate)
 
         setIsValidData(isBlankInput || isValidInput);
         setIsBlankData(isBlankInput);
@@ -286,11 +287,11 @@ function Employees() {
     }
 
     const processError = useCallback((error) => {
-        if(error.response && (error.response.status === 401)){
-            abrirFecharModalLoginInvalido();                    
-            setTextModalLogin("Tem de iniciar sessão para aceder a esta página");                
-        }else if(error.response && (error.response.status === 403)){
-            abrirFecharModalLoginInvalido();                    
+        if (error.response && (error.response.status === 401)) {
+            abrirFecharModalLoginInvalido();
+            setTextModalLogin("Tem de iniciar sessão para aceder a esta página");
+        } else if (error.response && (error.response.status === 403)) {
+            abrirFecharModalLoginInvalido();
             setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
         }
         console.log(error);
@@ -298,46 +299,53 @@ function Employees() {
 
     const pedidoGetUserRole = useCallback(async () => {
         try {
-          const response = await axios.get(baseUrlUser + "Roles");
-          setDataRole(response.data);
+            const response = await axios.get(baseUrlUser + "Roles");
+            setDataRole(response.data);
         } catch (error) {
-          processError(error);
+            processError(error);
         }
-      }, [baseUrlUser, setDataRole, processError]);
+    }, [baseUrlUser, setDataRole, processError]);
 
     const pedidoGet = useCallback(async () => {
         try {
-          const response = await axios.get(baseUrl);
-          setData(response.data);
+            const response = await axios.get(baseUrl);
+            setData(response.data);
         } catch (error) {
-          processError(error);
+            processError(error);
         }
-      }, [baseUrl, setData, processError]);
+    }, [baseUrl, setData, processError]);
 
     const pedidoPost = async () => {
+        const dataNasc = empregadoSelecionado.dataNasc;
+        const dataNascimentoFormatada = moment(dataNasc, "DD-MM-YYYY").format("YYYY-MM-DD");
+
         delete empregadoSelecionado.id;
         const formData = new FormData();
-        formData.append("name", empregadoSelecionado.name)
-        formData.append("contact", empregadoSelecionado.contact)
-        formData.append("email", empregadoSelecionado.email)
-        formData.append("morada", empregadoSelecionado.morada)
-        formData.append("pais", empregadoSelecionado.pais)
-        formData.append("codPostal", empregadoSelecionado.codPostal)
-        formData.append("sexo", empregadoSelecionado.sexo)
-        formData.append("dataNasc", empregadoSelecionado.dataNasc)
-        formData.append("image", empregadoSelecionado.image)
-        axios.post(baseUrl, formData)
-            .then(response => {
-                setData(data.concat(response.data));
-                setUpdateData(true);
-                abrirFecharModalAdicionar();
-                abrirFecharModalCriado();
-            }).catch(error => {
-                processError(error);
-            })
+        formData.append("name", empregadoSelecionado.name);
+        formData.append("contact", empregadoSelecionado.contact);
+        formData.append("email", empregadoSelecionado.email);
+        formData.append("morada", empregadoSelecionado.morada);
+        formData.append("pais", empregadoSelecionado.pais);
+        formData.append("codPostal", empregadoSelecionado.codPostal);
+        formData.append("sexo", empregadoSelecionado.sexo);
+        formData.append("dataNasc", dataNascimentoFormatada);
+        formData.append("image", empregadoSelecionado.image);
+
+        axios.post(baseUrl, formData).then(response => {
+            setData(data.concat(response.data));
+            setUpdateData(true);
+            abrirFecharModalAdicionar();
+            abrirFecharModalCriado();
+        }).catch(error => {
+            processError(error);
+        });
     }
 
+
     const pedidoPut = async () => {
+        const dataNasc = empregadoSelecionado.dataNasc;
+        const dataNascimentoFormatada = moment(dataNasc, "DD-MM-YYYY").format("YYYY-MM-DD");
+
         const formData = new FormData();
         formData.append('name', empregadoSelecionado.name);
         formData.append('contact', empregadoSelecionado.contact);
@@ -346,7 +354,7 @@ function Employees() {
         formData.append('pais', empregadoSelecionado.pais);
         formData.append('codPostal', empregadoSelecionado.codPostal);
         formData.append('sexo', empregadoSelecionado.sexo);
-        formData.append('dataNasc', empregadoSelecionado.dataNasc);
+        formData.append("dataNasc", dataNascimentoFormatada);
         formData.append('image', empregadoSelecionado.image);
 
         await axios.put(baseUrl + empregadoSelecionado.id, formData)
@@ -575,7 +583,7 @@ function Employees() {
                         <br />
                         <label>Data de Nascimento:</label>
                         <br />
-                        <input type="date" className="form-control" name="dataNasc" onChange={handleChangeData}
+                        <input type="text" className="form-control" name="dataNasc" onChange={handleChangeData}
                             value={empregadoSelecionado && formatDate(empregadoSelecionado.dataNasc)} />
                         {!isValidData && <span className="regularExp">Insira uma data válida.</span>}
                         {isBlankData && <span className="regularExp">Campo de preenchimento obrigatório.</span>}
@@ -689,10 +697,10 @@ function Employees() {
             </Modal>
 
             <Modal isOpen={modalLoginInvalido}>
-            <ModalHeader>Não Autorizado</ModalHeader>
+                <ModalHeader>Não Autorizado</ModalHeader>
                 <ModalBody>{textModalLogin}</ModalBody>
                 <ModalFooter>
-                    <button className="btnDanger" onClick={() => { window.location.href = '/login'; }}>Iniciar Sessão</button>
+                <Link to="../login"><button className="btnDanger">Iniciar Sessão</button></Link>
                 </ModalFooter>
             </Modal>
 

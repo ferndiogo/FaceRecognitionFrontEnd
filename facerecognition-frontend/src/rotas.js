@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Employees from "./pages/employees/employees";
 import Login from "./pages/login/login";
 import Home from "./pages/home";
@@ -12,10 +12,9 @@ import Accounts from "./pages/accounts/accounts";
 
 function Rotas() {
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Navbar />
             <Routes>
-                
                 <Route path="/" element={<Home />} />
                 <Route path="/Employees" element={<Employees />} />
                 <Route path="/Login" element={<Login />} />
@@ -24,7 +23,7 @@ function Rotas() {
                 <Route path="/NewAccount" element={<NewAccount />} />
                 <Route path='/Accounts' element={<Accounts />} />
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 
