@@ -34,9 +34,9 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
                     <td>{extrairDataHora(registo.dateTime)}</td>
                     <td>{getTipo(registo)}</td>
                     {(role === "Admin") && <td>
-                        <div className="d-inline-flex">
-                            <button className="btn btn-primary me-2" style={{ backgroundColor: '#267c70' }} onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                            <button className="btn btn-danger" style={{ backgroundColor: '#8B0000' }} onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                        <div className="tableR">
+                            <button className="btnOk tableBtn" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                            <button className="btnDanger tableBtn" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
                         </div>
                     </td>}
                 </tr>
@@ -53,14 +53,14 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
                             <td>{getTipo(registo)}</td>
                             {(role === "Admin") && <td>
                                 <div className="d-inline-flex">
-                                    <button className="btn btn-primary me-2" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                                    <button className="btn btn-danger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                                    <button className="btnOk" onClick={() => selecionarRegisto(registo, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                                    <button className="btnDanger" onClick={() => selecionarRegisto(registo, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
                                 </div>
                             </td>}
                         </tr>
                     );
                 } else {
-                    return null; 
+                    return null;
                 }
             })
         )

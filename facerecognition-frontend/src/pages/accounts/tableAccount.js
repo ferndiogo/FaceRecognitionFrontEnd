@@ -19,7 +19,7 @@ function TableAccount({ selecionarUser, users, search }) {
         const minutes = dateObj.getMinutes().toString().padStart(2, '0');
         const seconds = dateObj.getSeconds().toString().padStart(2, '0');
 
-        if(year<1900){
+        if (year < 1900) {
             return null;
         }
 
@@ -35,8 +35,10 @@ function TableAccount({ selecionarUser, users, search }) {
                     <td>{extrairDataHora(user.tokenCreated)}</td>
                     <td>{user.role}</td>
                     <td>
-                        <button className="btn btn-primary" onClick={() => selecionarUser(user, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                        <button className="btn btn-danger" onClick={() => selecionarUser(user, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                        <div className="tableR">
+                            <button className="btnOk tableBtn" onClick={() => selecionarUser(user, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                            <button className="btnDanger tableBtn" onClick={() => selecionarUser(user, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                        </div>
                     </td>
                 </tr>
             ))
@@ -47,15 +49,17 @@ function TableAccount({ selecionarUser, users, search }) {
             users.map(user => {
                 const username = user.username.toLowerCase();
                 if (username.includes(searchLowerCase)) {
-                    
+
                     return (
                         <tr key={user.id}>
                             <td>{user.username}</td>
                             <td>{extrairDataHora(user.tokenCreated)}</td>
                             <td>{user.role}</td>
                             <td>
-                                <button className="btn btn-primary" onClick={() => selecionarUser(user, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
-                                <button className="btn btn-danger" onClick={() => selecionarUser(user, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                                <div className="tableR">
+                                    <button className="btnOk tableBtn" onClick={() => selecionarUser(user, "Editar")}><FontAwesomeIcon icon={faEdit} /></button>
+                                    <button className="btnDanger tableBtn" onClick={() => selecionarUser(user, "Apagar")}><FontAwesomeIcon icon={faTrash} /></button>
+                                </div>
                             </td>
                         </tr>
                     );

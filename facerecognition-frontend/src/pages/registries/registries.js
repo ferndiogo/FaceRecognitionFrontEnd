@@ -429,8 +429,8 @@ function Registries() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoPost()}>Adicionar</button>
-                    <button className="btn1" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
+                    <button className="btnOk" onClick={() => pedidoPost()}>Adicionar</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalAdicionar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -466,8 +466,8 @@ function Registries() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoPut()}>Editar</button>
-                    <button className="btn1" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
+                    <button className="btnOk" onClick={() => pedidoPut()}>Editar</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalEditar()}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -476,8 +476,8 @@ function Registries() {
                     Confirma a eliminação deste registo de <b>{dataEmp.name}</b> com data e hora: <b>{extrairDataHora(registoSelecionado.dateTime)}</b> ?
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => pedidoDelete()}>Sim</button>
-                    <button className="btn1" onClick={() => abrirFecharModalApagar()}>Não</button>
+                    <button className="btnOk" onClick={() => pedidoDelete()}>Sim</button>
+                    <button className="btnDanger" onClick={() => abrirFecharModalApagar()}>Não</button>
                 </ModalFooter>
             </Modal>
 
@@ -487,7 +487,7 @@ function Registries() {
                     <div>O novo registo foi adicionado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => abrirFecharModalCriado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -497,7 +497,7 @@ function Registries() {
                     <div>O registo foi modificado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => abrirFecharModalEditado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -507,7 +507,7 @@ function Registries() {
                     <div>O registo selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btn" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => abrirFecharModalApagado()}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 

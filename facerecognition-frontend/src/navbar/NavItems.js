@@ -28,18 +28,18 @@ export const navItems = [
   },
   {
     id: 4,
-    title: "Iniciar Sessão",
-    path: "./login",
-    nName: "nav-item",
-    sName: "sidebar-item",
-    icon: <FontAwesomeIcon icon={faRightToBracket} style={{color: "#ffffff",}} />,
-  },
-  {
-    id: 5,
     title: "Utilizadores",
     path: './Accounts',
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faUser} />,
+  },
+  {
+    id: 5,
+    title: "Iniciar Sessão",
+    path: "./login",
+    nName: "nav-item",
+    sName: "sidebar-item",
+    icon: <FontAwesomeIcon icon={faRightToBracket} style={{color: "#ffffff",}} />,
   },
 ];
