@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faPeopleGroup, faDatabase, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faPeopleGroup, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 export const navItems = [
   {
     id: 1,
     title: "Página Inicial",
-    path: "./home",
+    path: "./",
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faHouse} />,

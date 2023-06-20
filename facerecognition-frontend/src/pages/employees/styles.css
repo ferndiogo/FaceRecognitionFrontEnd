@@ -98,6 +98,7 @@ td {
 }
 
 .barra {
+  margin-top: 30px;
   display: flex;
   align-items: center;
 }
@@ -127,6 +128,12 @@ td {
   color: #ffffff;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.btnsCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 900px) {
@@ -168,4 +175,9 @@ td {
   .titulo {
     margin-bottom: 30px;
   }
+}
+
+.regularExp{
+  color: #ff0000;
+  font-size: 13px;
 }

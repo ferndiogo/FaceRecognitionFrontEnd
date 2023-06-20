@@ -31,37 +31,8 @@ a {
   }
 }
 
-.btn1 {
-  background: rgb(216, 59, 59);
-  border: none;
-  border-radius: 5px;
-  padding: 6px 16px;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: 0.3s all ease-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: whitesmoke;
-}
-
-.btn1:hover {
-  background: whitesmoke;
-  color: rgb(216, 59, 59);;
-}
-
-.btn1 span {
-  margin-left: 0.7rem;
-}
-
-@media screen and (max-width: 900px) {
-  .btn1 span {
-    display: none;
-  }
-}
-
-.btn3 {
-  background: #6495ED;
+.btnDanger {
+  background: #8B0000;
   border: none;
   border-radius: 5px;
   padding: 6px 16px;
@@ -71,23 +42,76 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
   color: whitesmoke;
 }
 
-.btn3:hover {
+.btnDanger:hover {
   background: whitesmoke;
-  color: #6495ED;
+  color: #8B0000;
 }
 
-.btn3 span {
+.btnDanger span {
   margin-left: 0.7rem;
 }
 
 @media screen and (max-width: 900px) {
-  .btn3 span {
+  .btnDanger span {
+    display: none;
+  }
+}
+
+.btnInfo {
+  background: #267c70;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s all ease-out;
+  display: block;
+  margin: 10px 10px;
+  color: whitesmoke;
+}
+
+.btnInfo:hover {
+  background: whitesmoke;
+  color: #267c70;
+}
+
+.btnInfo span {
+  margin-left: 0.7rem;
+}
+
+@media screen and (max-width: 900px) {
+  .btnInfo span {
+    display: none;
+  }
+}
+
+.btnOk {
+  background: #6495ED;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s all ease-out;
+  display: block;
+  margin: 10px 10px;
+  color: whitesmoke;
+}
+
+.btnOk:hover {
+  background: whitesmoke;
+  color: #6495ED;
+}
+
+.btnOk span {
+  margin-left: 0.7rem;
+}
+
+@media screen and (max-width: 900px) {
+  .btnOk span {
     display: none;
   }
 }
