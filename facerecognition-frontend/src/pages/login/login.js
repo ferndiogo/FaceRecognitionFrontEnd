@@ -5,9 +5,6 @@ import { url } from '../../config';
 
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 
-import { url } from '../../config';
-
-
 const Login = () => {
 
     const baseUrl = url + "Auth/login";

@@ -7,6 +7,6 @@
   "cordova": {},
   "server": {
     "androidScheme": "https",
-    "url": "http://192.168.10.1:3000"
+    "url": "https://rekognitionipt.azurewebsites.net"
   }
 }
