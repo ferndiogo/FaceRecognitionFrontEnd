@@ -27,7 +27,6 @@ const Login = () => {
         setUtilizadorSelecionado({
             ...utilizadorSelecionado, [name]: value
         });
-        console.log(utilizadorSelecionado);
     }
 
     // Função para criptografar uma string
@@ -57,7 +56,6 @@ const Login = () => {
                 setTxtErrorPassword(error.response.data);
                 setTxtErrorUsername('');
             }
-            console.log(error);
         })
     }
 

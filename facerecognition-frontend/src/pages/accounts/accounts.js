@@ -71,7 +71,6 @@ const Accounts = () => {
         setUserSelecionado({
             ...userSelecionado, [name]: value
         });
-        console.log(userSelecionado);
     }
 
     const handleChangeSelect = e => {
@@ -79,18 +78,16 @@ const Accounts = () => {
         setUserSelecionado({
             ...userSelecionado, [name]: value
         });
-        console.log(userSelecionado);
     }
 
     const processError = useCallback((error) => {
         if (error.response && (error.response.status === 401)) {
             setModalLoginInvalido(true);
-            setTextModalLogin("Tem de iniciar sessão para aceder a esta página");
+            setTextModalLogin("Tem de iniciar sessão para aceder a esta página!");
         } else if (error.response && (error.response.status === 403)) {
             setModalLoginInvalido(true);
-            setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
+            setTextModalLogin("Para realizar essa ação tem de iniciar sessão com um utilizador com essas permissões.");
         }
-        console.log(error);
     }, []);
 
     const pedidoGet = useCallback(async () => {
@@ -104,7 +101,6 @@ const Accounts = () => {
 
     const pedidoPut = async () => {
         const formData = new FormData();
-        console.log(userSelecionado)
         formData.append('username', userSelecionado.username);
         formData.append('role', userSelecionado.role);
         formData.append('id', userSelecionado.id);

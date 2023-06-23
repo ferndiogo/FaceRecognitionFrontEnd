@@ -131,7 +131,6 @@ function Registries() {
         setRegistoSelecionado({
             ...registoSelecionado, [name]: value
         });
-        console.log(registoSelecionado);
     }
 
     const handleChangeSearch = e => {
@@ -147,7 +146,6 @@ function Registries() {
         setRegistoSelecionado({
             ...registoSelecionado, [name]: value
         });
-        console.log(registoSelecionado);
 
         const isBlankInput = value.trim() === '';
         setIsBlankEntraSai(isBlankInput);
@@ -205,7 +203,6 @@ function Registries() {
             abrirFecharModalLoginInvalido();
             setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
         }
-        console.log(error);
     }, [abrirFecharModalLoginInvalido]);
 
     const pedidoGetUserRole = useCallback(async () => {
@@ -221,7 +218,6 @@ function Registries() {
         await axios.get(baseUrlEmp + idEmp)
             .then(response => {
                 setDataEmp(response.data);
-                //console.log(response.data);
             }).catch(error => {
                 processError(error);
             })
