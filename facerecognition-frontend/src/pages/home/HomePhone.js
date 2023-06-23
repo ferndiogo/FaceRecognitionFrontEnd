@@ -5,7 +5,7 @@ import Camera from "./cameraAndroid";
 const HomePhone = () => {
   return (
     <div className="home-page">
-      <h1>Captura de Imagem phone</h1>
+      <h1>Captura de Imagem</h1>
       <br />
       <br />
       <Camera />

@@ -27,7 +27,9 @@ const Accounts = () => {
         return plaintext;
     };
 
-    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+    if (localStorage.getItem('token') != null) {
+        axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+    }
 
     const [data, setData] = useState([]);
 
