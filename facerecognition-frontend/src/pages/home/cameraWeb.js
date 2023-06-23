@@ -5,7 +5,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faX } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
 import { url, encryptionKey } from '../../config';
 
@@ -25,12 +25,14 @@ function Camera() {
   const [capturedImage, setCapturedImage] = useState(null);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const [modalAdicionado, setModalAdicionado] = useState(false);
+  const [modalErro, setModalErro] = useState(false);
+
+  const [txtModalErro, setTxtModalErro] = useState('');
 
   const baseUrl = url + "Registry/";
 
-  const [data, setData] = useState([]);
+  const [employeeName, setEmployeeName] = useState('');
 
   const startCamera = () => {
     if (webcamRef.current) {
@@ -69,8 +71,13 @@ function Camera() {
 
         try {
           const response = await axios.post(baseUrl, formData);
-          setData(data.concat(response.data));
+          setEmployeeName(response.data[0].employee.name);
+          closeModal();
+          abrirFecharModalAdicionado();
         } catch (error) {
+          closeModal();
+          setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
+          setModalErro(true);
           console.log(error);
         }
       } else {
@@ -84,13 +91,20 @@ function Camera() {
 
         try {
           const response = await axios.post(baseUrl, formData);
-          setData(data.concat(response.data));
+          setEmployeeName(response.data[0].employee.name);
           closeModal();
-          abrirFecharModalAdicionado()
+          abrirFecharModalAdicionado();
         } catch (error) {
+          closeModal();
+          setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
+          setModalErro(true);
           console.log(error);
         }
       }
+    } else {
+      closeModal();
+      setTxtModalErro("Ocorreu um erro ao capturar imagem!");
+      setModalErro(true);
     }
   };
 
@@ -125,8 +139,8 @@ function Camera() {
       <Webcam
         audio={false}
         ref={webcamRef}
-        width={640}
-        height={480}
+        width={1000}
+        height={570}
         onUserMedia={startCamera}
       />
       <div className="d-flex justify-content-center">
@@ -147,10 +161,22 @@ function Camera() {
             <Modal isOpen={modalAdicionado}>
               <ModalHeader>Registo Adicionado</ModalHeader>
               <ModalBody>
-                <div>O registo foi adicionado com sucesso!</div>
+                <span>O registo foi adicionado com sucesso!</span>
+                <br />
+                <span>Funcionário: <b>{employeeName}</b></span>
               </ModalBody>
               <ModalFooter>
                 <button className="btnOk" onClick={() => abrirFecharModalAdicionado()}><FontAwesomeIcon icon={faCheck} /></button>
+              </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalErro}>
+              <ModalHeader>Erro</ModalHeader>
+              <ModalBody>
+                <span>{txtModalErro}</span>
+              </ModalBody>
+              <ModalFooter>
+                <button className="btnDanger" onClick={() => setModalErro(false)}><FontAwesomeIcon icon={faX} /></button>
               </ModalFooter>
             </Modal>
           </div>
