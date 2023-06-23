@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faPeopleGroup, faCircleInfo, faRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faPeopleGroup, faCircleInfo, faUser } from '@fortawesome/free-solid-svg-icons';
 
 export const navItems = [
   {
@@ -9,6 +9,7 @@ export const navItems = [
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faHouse} />,
+    role: ''
   },
   {
     id: 2,
@@ -16,7 +17,8 @@ export const navItems = [
     path: "./employees",
     nName: "nav-item",
     sName: "sidebar-item",
-    icon: <FontAwesomeIcon icon={faPeopleGroup} />
+    icon: <FontAwesomeIcon icon={faPeopleGroup} />,
+    role: 'User'
   },
   {
     id: 3,
@@ -25,6 +27,7 @@ export const navItems = [
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faCircleInfo} />,
+    role: ''
   },
   {
     id: 4,
@@ -33,13 +36,17 @@ export const navItems = [
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faUser} />,
+    role: 'Admin'
   },
-  {
-    id: 5,
-    title: "Iniciar Sessão",
-    path: "./login",
-    nName: "nav-item",
-    sName: "sidebar-item",
-    icon: <FontAwesomeIcon icon={faRightToBracket} style={{color: "#ffffff",}} />,
-  },
+  
 ];
+
+//{
+//  id: 5,
+//  title: "Iniciar Sessão",
+//  path: "./login",
+//  nName: "nav-item",
+//  sName: "sidebar-item",
+//  icon: <FontAwesomeIcon icon={faRightToBracket} style={{color: "#ffffff",}} />,
+//  role: ''
+//},

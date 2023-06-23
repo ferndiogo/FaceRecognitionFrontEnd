@@ -6,10 +6,20 @@ import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-
-import { url } from '../../config';
+import CryptoJS from 'crypto-js';
+import { url, encryptionKey } from '../../config';
 
 function Camera() {
+
+  // Função para descriptografar uma string
+  const decryptString = (ciphertext) => {
+    const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+    const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    return plaintext;
+  };
+
+  axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+
   const webcamRef = useRef(null);
 
   const [capturedImage, setCapturedImage] = useState(null);
@@ -44,7 +54,7 @@ function Camera() {
 
   const abrirFecharModalAdicionado = () => {
     setModalAdicionado(!modalAdicionado);
-}
+  }
 
   const enviarImagem = async () => {
     if (capturedImage) {
@@ -135,13 +145,13 @@ function Camera() {
             </Modal>
 
             <Modal isOpen={modalAdicionado}>
-                <ModalHeader>Registo Adicionado</ModalHeader>
-                <ModalBody>
-                    <div>O registo foi adicionado com sucesso!</div>
-                </ModalBody>
-                <ModalFooter>
-                    <button className="btnOk" onClick={() => abrirFecharModalAdicionado()}><FontAwesomeIcon icon={faCheck} /></button>
-                </ModalFooter>
+              <ModalHeader>Registo Adicionado</ModalHeader>
+              <ModalBody>
+                <div>O registo foi adicionado com sucesso!</div>
+              </ModalBody>
+              <ModalFooter>
+                <button className="btnOk" onClick={() => abrirFecharModalAdicionado()}><FontAwesomeIcon icon={faCheck} /></button>
+              </ModalFooter>
             </Modal>
           </div>
         )}

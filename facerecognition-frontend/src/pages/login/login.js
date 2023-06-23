@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './styles.css';
-import { url } from '../../config';
+import { url, encryptionKey } from '../../config';
+import CryptoJS from 'crypto-js';
 
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -29,6 +30,12 @@ const Login = () => {
         console.log(utilizadorSelecionado);
     }
 
+    // Função para criptografar uma string
+    const encryptString = (plaintext) => {
+        const ciphertext = CryptoJS.AES.encrypt(plaintext, encryptionKey).toString();
+        return ciphertext;
+    };
+
     const pedidoPost = async () => {
         delete utilizadorSelecionado.id;
         const formData = new FormData();
@@ -40,7 +47,7 @@ const Login = () => {
             }
         }).then(response => {
             // Armazenar o token no local storage
-            localStorage.setItem('token', 'Bearer ' + response.data);
+            localStorage.setItem('token', encryptString('Bearer ' + response.data));
             setModalLoginSucesso(true);
         }).catch(error => {
             if (error.response.data === "Utilizador não encontrado.") {
@@ -53,6 +60,7 @@ const Login = () => {
             console.log(error);
         })
     }
+
     return (
         <div>
             <div className="login-container">

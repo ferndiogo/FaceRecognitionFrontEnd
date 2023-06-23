@@ -15,8 +15,8 @@ import Select from 'react-select';
 
 import TableRegistos from './tableRegistos';
 import moment from 'moment';
-
-import { url } from '../../config';
+import CryptoJS from 'crypto-js';
+import { url, encryptionKey } from '../../config';
 import { Link } from "react-router-dom";
 import { Card } from 'react-bootstrap';
 
@@ -26,7 +26,14 @@ function Registries() {
     const baseUrlEmp = url + "Employee/";
     const baseUrlUser = url + "Auth/";
 
-    axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+    // Função para descriptografar uma string
+    const decryptString = (ciphertext) => {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        return plaintext;
+    };
+
+    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
 
     const idEmp = useParams().id;
 
@@ -130,7 +137,7 @@ function Registries() {
     const handleChangeSearch = e => {
         if (e.target.value !== "") {
             setSearchText(new Date(e.target.value));
-        }else{
+        } else {
             setSearchText(null);
         }
     }
@@ -515,7 +522,7 @@ function Registries() {
                 <ModalHeader>Não Autorizado</ModalHeader>
                 <ModalBody>{textModalLogin}</ModalBody>
                 <ModalFooter>
-                <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
+                    <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
                 </ModalFooter>
             </Modal>
 
