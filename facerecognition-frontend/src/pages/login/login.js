@@ -79,7 +79,7 @@ const Login = () => {
             </div>
 
             <Modal isOpen={modalLoginSucesso}>
-                <ModalBody>Iniciar sessão bem sucedido!</ModalBody>
+                <ModalBody>Sessão iniciada com sucesso!</ModalBody>
                 <ModalFooter>
                     <button className="btnInfo" onClick={() => { window.location.href = '/'; }}>Página Inicial</button>
                 </ModalFooter>
