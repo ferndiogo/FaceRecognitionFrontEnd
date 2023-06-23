@@ -30,7 +30,9 @@ function Employees() {
         return plaintext;
     };
 
-    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+    if (localStorage.getItem('token') != null) {
+        axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+    }
 
     const [data, setData] = useState([]);
     const [dataRole, setDataRole] = useState('');
@@ -152,7 +154,6 @@ function Employees() {
         setEmpregadoSelecionado({
             ...empregadoSelecionado, [name]: value
         });
-        console.log(empregadoSelecionado);
     }
 
     const handleChangeName = (event) => {
@@ -227,7 +228,6 @@ function Employees() {
         const dateToCheck = event.target.value;
         const formattedDate = moment(dateToCheck, 'DD/MM/YYYY').format('YYYY/MM/DD');
         const isValidInput = moment(formattedDate).isValid();
-        console.log(formattedDate)
 
         setIsValidData(isBlankInput || isValidInput);
         setIsBlankData(isBlankInput);
@@ -243,7 +243,6 @@ function Employees() {
         setEmpregadoSelecionado({
             ...empregadoSelecionado, [name]: value
         });
-        console.log(empregadoSelecionado);
         // Verificar se o valor selecionado está vazio
         const isBlankInput = value.trim() === '';
         setIsBlankSexo(isBlankInput);
@@ -302,7 +301,6 @@ function Employees() {
             abrirFecharModalLoginInvalido();
             setTextModalLogin("Para realizar essa ação têm de iniciar sessão com um utilizador com essas permissôes");
         }
-        console.log(error);
     }, [abrirFecharModalLoginInvalido]);
 
     const pedidoGetUserRole = useCallback(async () => {
@@ -447,7 +445,7 @@ function Employees() {
                 {(dataRole === "Admin") && <div className="esquerda">
                     <FontAwesomeIcon icon={faUser} style={{ fontSize: "30px", color: "#ffffff", }} />
                     <h5 className="addfunc">Adicionar Funcionário</h5>
-                    <button className="btn" onClick={() => abrirFecharModalAdicionar()}>
+                    <button className="btn" onClick={() => {abrirFecharModalAdicionar(); resetBooleans()}}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
                 </div>}
@@ -603,8 +601,8 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btnOk" onClick={() => { pedidoPut(); resetBooleans() }}>Editar</button>
-                    <button className="btnDanger" onClick={() => { abrirFecharModalEditar(); resetBooleans() }}>Cancelar</button>
+                    <button className="btnOk" onClick={() => { pedidoPut(); }}>Editar</button>
+                    <button className="btnDanger" onClick={() => { abrirFecharModalEditar(); }}>Cancelar</button>
                 </ModalFooter>
             </Modal>
 
@@ -634,7 +632,7 @@ function Employees() {
                     <div>Os dados do funcionário foram editados com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btnOk" onClick={() => { abrirFecharModalEditado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => { abrirFecharModalEditado(); atualizar(); }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -644,7 +642,7 @@ function Employees() {
                     <div>O funcionário selecionado foi apagado com sucesso!</div>
                 </ModalBody>
                 <ModalFooter>
-                    <button className="btnOK" onClick={() => { abrirFecharModalApagado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
+                    <button className="btnOk" onClick={() => { abrirFecharModalApagado(); atualizar() }}><FontAwesomeIcon icon={faCheck} /></button>
                 </ModalFooter>
             </Modal>
 
@@ -698,7 +696,7 @@ function Employees() {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    {(dataRole === "Admin") && <button className="btnInfo" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes(); resetBooleansEdit() }}>Editar</button>}
+                    {(dataRole === "Admin") && <button className="btnInfo" onClick={() => { abrirFecharModalEditar(); abrirFecharModalDetalhes();  resetBooleansEdit()}}>Editar</button>}
                     {(dataRole === "Admin") && <button className="btnDanger" onClick={() => { abrirFecharModalApagar(); abrirFecharModalDetalhes(); }}>Apagar</button>}
                     <button className="btnOk" onClick={() => abrirFecharModalDetalhes()}>Cancelar</button>
                 </ModalFooter>

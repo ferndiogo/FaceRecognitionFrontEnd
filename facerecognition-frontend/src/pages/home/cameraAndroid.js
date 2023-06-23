@@ -17,7 +17,9 @@ function Camera() {
     return plaintext;
   };
 
-  axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+  if(localStorage.getItem('token') != null) {
+    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+  }
 
   const [capturedImage, setCapturedImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -70,7 +72,6 @@ function Camera() {
       const allowedExtensions = ['png', 'jpeg', 'jpg'];
 
       if (allowedExtensions.includes(fileExtension)) {
-        console.log('Imagem capturada:', capturedImage);
 
         const formData = new FormData();
         formData.append('img', capturedImage);
@@ -84,7 +85,6 @@ function Camera() {
           closeModal();
           setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
           setModalErro(true);
-          console.log(error);
         }
       } else {
 
@@ -111,15 +111,9 @@ function Camera() {
                 closeModal();
                 setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
                 setModalErro(true);
-                console.log(error);
               });
           }, 'image/jpeg', 0.7); // Defina a qualidade desejada (0.7 neste exemplo)
         };
-
-        img.onerror = () => {
-          console.log('Falha ao converter a imagem.');
-        };
-
         img.src = capturedImage;
       }
     } else {
