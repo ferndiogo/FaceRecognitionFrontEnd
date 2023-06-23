@@ -4,10 +4,20 @@ import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-
-import { url } from '../../config';
+import CryptoJS from 'crypto-js';
+import { url, encryptionKey } from '../../config';
 
 function Camera() {
+
+  // Função para descriptografar uma string
+  const decryptString = (ciphertext) => {
+    const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+    const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    return plaintext;
+  };
+
+  axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+
   const [capturedImage, setCapturedImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAdicionado, setModalAdicionado] = useState(false);

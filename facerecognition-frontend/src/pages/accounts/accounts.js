@@ -13,14 +13,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
 
 import TableAccount from './tableAccount';
-
-import { url } from '../../config';
+import CryptoJS from 'crypto-js';
+import { url, encryptionKey } from '../../config';
 
 const Accounts = () => {
 
     const baseUrl = url + 'Auth';
 
-    axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+    // Função para descriptografar uma string
+    const decryptString = (ciphertext) => {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        return plaintext;
+    };
+
+    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
 
     const [data, setData] = useState([]);
 
@@ -91,7 +98,7 @@ const Accounts = () => {
             }).catch(error => {
                 processError(error);
             })
-    }, [processError,baseUrl])
+    }, [processError, baseUrl])
 
     const pedidoPut = async () => {
         const formData = new FormData();
@@ -99,7 +106,7 @@ const Accounts = () => {
         formData.append('username', userSelecionado.username);
         formData.append('role', userSelecionado.role);
         formData.append('id', userSelecionado.id);
-        await axios.put(baseUrl + '/edit/' +userSelecionado.id, formData)
+        await axios.put(baseUrl + '/edit/' + userSelecionado.id, formData)
             .then(response => {
                 setUpdateData(true);
                 setModalEditar(false);
@@ -110,7 +117,7 @@ const Accounts = () => {
     }
 
     const pedidoDelete = async () => {
-        await axios.delete(baseUrl + '/delete/' +userSelecionado.id)
+        await axios.delete(baseUrl + '/delete/' + userSelecionado.id)
             .then(response => {
                 setUpdateData(true);
                 setModalApagar(false);
@@ -163,7 +170,7 @@ const Accounts = () => {
                 <ModalHeader>Não Autorizado</ModalHeader>
                 <ModalBody>{textModalLogin}</ModalBody>
                 <ModalFooter>
-                <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
+                    <Link to="login"><button className="btnDanger">Iniciar Sessão</button></Link>
                 </ModalFooter>
             </Modal>
 

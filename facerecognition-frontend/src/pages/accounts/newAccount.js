@@ -1,12 +1,22 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './styles.css';
-import { url } from '../../config';
+import CryptoJS from 'crypto-js';
+import { url, encryptionKey } from '../../config';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 const NewAccount = () => {
 
-    const baseUrl = url+"Auth/register";
+    const baseUrl = url + "Auth/register";
+
+    // Função para descriptografar uma string
+    const decryptString = (ciphertext) => {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        return plaintext;
+    };
+
+    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
 
     const [txtErrorPassword, setTxtErrorPassword] = useState('');
     const [txtErrorUsername, setTxtErrorUsername] = useState('');
@@ -40,7 +50,7 @@ const NewAccount = () => {
                 ...utilizadorSelecionado, [name]: value
             });
             console.log(utilizadorSelecionado);
-        }else{
+        } else {
             setTxtErrorPassword("Passwords não coincidem.");
         }
 
@@ -62,7 +72,7 @@ const NewAccount = () => {
         })
     }
 
-    const resetForm = () =>{
+    const resetForm = () => {
         setModalSucesso(false);
         pass1.current.value = '';
         pass2.current.value = '';
@@ -96,7 +106,7 @@ const NewAccount = () => {
             <Modal isOpen={modalSucesso}>
                 <ModalBody>Nova conta criada com sucesso!</ModalBody>
                 <ModalFooter>
-                    <button className="btnOk" onClick={() => {resetForm(); }}>Ok</button>
+                    <button className="btnOk" onClick={() => { resetForm(); }}>Ok</button>
                 </ModalFooter>
             </Modal>
         </div>

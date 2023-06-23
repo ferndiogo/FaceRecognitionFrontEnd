@@ -8,14 +8,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 //import { faHouse, faPeopleGroup, faCircleInfo, faRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { url } from '../config';
+import { url, encryptionKey } from '../config';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import CryptoJS from 'crypto-js';
 
 
 function Navbar() {
 
   const baseUrlUser = url + "Auth/";
-  axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+
+  // Função para descriptografar uma string
+  const decryptString = (ciphertext) => {
+    const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+    const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    return plaintext;
+  };
+
+  axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
 
   const [mobile, setMobile] = useState(false);
   const [sidebar, setSidebar] = useState(false);
@@ -165,7 +174,7 @@ function Navbar() {
         <ModalHeader>Terminar Sessão</ModalHeader>
         <ModalBody>Tem a certeza que deseja terminar sessão?</ModalBody>
         <ModalFooter>
-          <Link to="/"><button className="btnOk" onClick={() => {terminarSessão();window.location.reload();}}>Sim</button></Link>
+          <Link to="/"><button className="btnOk" onClick={() => { terminarSessão(); window.location.reload(); }}>Sim</button></Link>
           <button className="btnDanger" onClick={() => setModalTerminarSessao(false)}>Não</button>
         </ModalFooter>
       </Modal>
