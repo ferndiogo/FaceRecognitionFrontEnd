@@ -39,7 +39,6 @@ const NewAccount = () => {
         setUtilizadorSelecionado({
             ...utilizadorSelecionado, [name]: value
         });
-        console.log(utilizadorSelecionado);
     }
 
     const handleChangePassword = e => {
@@ -49,7 +48,6 @@ const NewAccount = () => {
             setUtilizadorSelecionado({
                 ...utilizadorSelecionado, [name]: value
             });
-            console.log(utilizadorSelecionado);
         } else {
             setTxtErrorPassword("Passwords não coincidem.");
         }
@@ -68,7 +66,6 @@ const NewAccount = () => {
             setModalSucesso(true);
         }).catch(error => {
             setTxtErrorUsername(error.response.data);
-            console.log(error);
         })
     }
 

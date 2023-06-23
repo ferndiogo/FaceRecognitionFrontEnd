@@ -18,7 +18,9 @@ function Camera() {
     return plaintext;
   };
 
-  axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+  if(localStorage.getItem('token') != null) {
+    axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
+  }
 
   const webcamRef = useRef(null);
 
@@ -64,7 +66,6 @@ function Camera() {
       const allowedExtensions = ['png', 'jpeg', 'jpg'];
 
       if (allowedExtensions.includes(fileExtension)) {
-        console.log("Imagem capturada:", capturedImage);
 
         const formData = new FormData();
         formData.append("img", capturedImage);
@@ -78,13 +79,10 @@ function Camera() {
           closeModal();
           setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
           setModalErro(true);
-          console.log(error);
         }
       } else {
-        console.log("Formato de imagem não suportado. Convertendo para PNG...");
 
         const convertedImage = await convertToPng(capturedImage);
-        console.log("Imagem convertida:", convertedImage);
 
         const formData = new FormData();
         formData.append("img", convertedImage, "captured_image.png");
@@ -98,7 +96,6 @@ function Camera() {
           closeModal();
           setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
           setModalErro(true);
-          console.log(error);
         }
       }
     } else {
