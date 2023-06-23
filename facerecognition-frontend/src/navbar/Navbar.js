@@ -52,14 +52,14 @@ function Navbar() {
   }, [])
 
   useEffect(() => {
-    if (window.innerWidth < 1065) {
+    if (window.innerWidth < 1350) {
       setMobile(true);
     }
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1065) {
+      if (window.innerWidth < 1350) {
         setMobile(true);
       } else {
         setMobile(false);
@@ -113,7 +113,7 @@ function Navbar() {
             ) : (
               <li className="nav-item">
                 <button onClick={() => setModalTerminarSessao(true)} style={{ backgroundColor: "transparent", padding: 0, border: 0 }}>
-                  <Link>
+                  <Link to='/'>
                     <FontAwesomeIcon icon={faRightToBracket} style={{ color: "#ffffff", }} />
                     <span>{txtSessao}</span>
                   </Link>
@@ -161,12 +161,23 @@ function Navbar() {
               return null;
             }
           })}
-          <li className="nav-item">
-            <Link to="./login">
-              <FontAwesomeIcon icon={faRightToBracket} style={{ color: "#ffffff", }} />
-              <span>{txtSessao}</span>
-            </Link>
-          </li>
+          {(txtSessao === 'Iniciar Sessão') ? (
+              <li className="sidebar-item">
+                <Link to="./Login">
+                  <FontAwesomeIcon icon={faRightToBracket} style={{ color: "#ffffff", }} />
+                  <span>{txtSessao}</span>
+                </Link>
+              </li>
+            ) : (
+              <li className="sidebar-item">
+                <button onClick={() => setModalTerminarSessao(true)} style={{ backgroundColor: "transparent", padding: 0, border: 0 }}>
+                  <Link to='/'>
+                    <FontAwesomeIcon icon={faRightToBracket} style={{ color: "#ffffff", }} />
+                    <span>{txtSessao}</span>
+                  </Link>
+                </button>
+              </li>
+            )}
         </ul>
       </div>
 

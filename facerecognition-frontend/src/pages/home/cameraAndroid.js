@@ -3,11 +3,12 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faX } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
 import { url, encryptionKey } from '../../config';
 
 function Camera() {
+  const baseUrl = url + 'Registry/';
 
   // Função para descriptografar uma string
   const decryptString = (ciphertext) => {
@@ -21,8 +22,11 @@ function Camera() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAdicionado, setModalAdicionado] = useState(false);
-  const baseUrl = url + 'Registry/';
-  const [data, setData] = useState([]);
+  const [modalErro, setModalErro] = useState(false);
+
+  const [txtModalErro, setTxtModalErro] = useState('');
+
+  const [employeeName, setEmployeeName] = useState('');
 
   const openCamera = () => {
     const input = document.createElement('input');
@@ -62,9 +66,7 @@ function Camera() {
 
   const enviarImagem = async () => {
     if (capturedImage) {
-      const fileExtension = capturedImage.substring(
-        capturedImage.lastIndexOf('.') + 1
-      ).toLowerCase();
+      const fileExtension = capturedImage.substring(capturedImage.lastIndexOf('.') + 1).toLowerCase();
       const allowedExtensions = ['png', 'jpeg', 'jpg'];
 
       if (allowedExtensions.includes(fileExtension)) {
@@ -75,8 +77,13 @@ function Camera() {
 
         try {
           const response = await axios.post(baseUrl, formData);
-          setData(data.concat(response.data));
+          setEmployeeName(response.data[0].employee.name);
+          closeModal();
+          abrirFecharModalAdicionado();
         } catch (error) {
+          closeModal();
+          setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
+          setModalErro(true);
           console.log(error);
         }
       } else {
@@ -96,11 +103,14 @@ function Camera() {
 
             axios.post(baseUrl, formData)
               .then((response) => {
-                setData(data.concat(response.data));
+                setEmployeeName(response.data[0].employee.name);
                 closeModal();
                 abrirFecharModalAdicionado();
               })
               .catch((error) => {
+                closeModal();
+                setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
+                setModalErro(true);
                 console.log(error);
               });
           }, 'image/jpeg', 0.7); // Defina a qualidade desejada (0.7 neste exemplo)
@@ -112,6 +122,10 @@ function Camera() {
 
         img.src = capturedImage;
       }
+    } else {
+      closeModal();
+      setTxtModalErro("Ocorreu um erro ao capturar imagem!");
+      setModalErro(true);
     }
   };
 
@@ -129,24 +143,32 @@ function Camera() {
                 <img className="imagem" src={capturedImage} alt="Imagem Capturada" />
               </ModalBody>
               <ModalFooter>
-                <button className="btnOk" onClick={enviarImagem}>
-                  Enviar
-                </button>
-                <button className="btnDanger" onClick={closeModal}>
-                  Cancelar
-                </button>
+                <button className="btnOk" onClick={enviarImagem}>Enviar</button>
+                <button className="btnDanger" onClick={closeModal}>Cancelar</button>
               </ModalFooter>
             </Modal>
 
             <Modal isOpen={modalAdicionado}>
               <ModalHeader>Registo Adicionado</ModalHeader>
               <ModalBody>
-                <div>O registo foi adicionado com sucesso!</div>
+                <span>O registo foi adicionado com sucesso!</span>
+                <br />
+                <span>Funcionário: <b>{employeeName}</b></span>
               </ModalBody>
               <ModalFooter>
                 <button className="btnOk" onClick={abrirFecharModalAdicionado}>
                   <FontAwesomeIcon icon={faCheck} />
                 </button>
+              </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalErro}>
+              <ModalHeader>Erro</ModalHeader>
+              <ModalBody>
+                <span>{txtModalErro}</span>
+              </ModalBody>
+              <ModalFooter>
+                <button className="btnDanger" onClick={() => setModalErro(false)}><FontAwesomeIcon icon={faX} /></button>
               </ModalFooter>
             </Modal>
           </div>
