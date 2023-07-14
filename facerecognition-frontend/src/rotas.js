@@ -8,6 +8,7 @@ import Registries from "./pages/registries/registries";
 import About from "./pages/about/about";
 import NewAccount from "./pages/accounts/newAccount";
 import Accounts from "./pages/accounts/accounts";
+import ChangePass from "./pages/login/changePass";
 
 
 function Rotas() {
@@ -22,6 +23,7 @@ function Rotas() {
                 <Route path="/About" element={<About />} />
                 <Route path="/NewAccount" element={<NewAccount />} />
                 <Route path='/Accounts' element={<Accounts />} />
+                <Route path='/ChangePassword' element={<ChangePass />} />
             </Routes>
         </HashRouter>
     );
