@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faPeopleGroup, faCircleInfo, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faPeopleGroup, faCircleInfo, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 
 export const navItems = [
   {
@@ -38,6 +38,15 @@ export const navItems = [
     icon: <FontAwesomeIcon icon={faUser} />,
     role: 'Admin'
   },
+  {
+    id: 5,
+    title: "Password",
+    path: './ChangePassword',
+    nName: "nav-item",
+    sName: "sidebar-item",
+    icon: <FontAwesomeIcon icon={faKey} />,
+    role: 'Admin'
+  }
   
 ];
 

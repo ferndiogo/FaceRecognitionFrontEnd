@@ -36,7 +36,7 @@ const ChangePass = () => {
 
     // Função para descriptografar uma string
     const decryptString = (ciphertext) => {
-        const bytes = CryptoJS.AES.decrypt(ciphertext, encryptionKey);
+        const bytes = CryptoJS.AES.decrypt(ciphertext.toString(), encryptionKey);
         const plaintext = bytes.toString(CryptoJS.enc.Utf8);
         return plaintext;
     };
