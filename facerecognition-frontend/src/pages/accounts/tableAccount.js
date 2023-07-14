@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function TableAccount({ selecionarUser, users, search }) {
 
+     // Função para extrair a data e hora formatada a partir de uma string de data e hora
     function extrairDataHora(dateTimeString) {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
@@ -27,6 +28,7 @@ function TableAccount({ selecionarUser, users, search }) {
         return formattedDate;
     }
 
+     // Renderização da tabela de utilizadores
     if (search === '') {
         return (
             users.map(user => (

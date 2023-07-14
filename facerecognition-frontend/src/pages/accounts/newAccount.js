@@ -34,6 +34,7 @@ const NewAccount = () => {
     const pass2 = useRef(null);
     const username = useRef(null);
 
+    // Função para lidar com a mudança no campo do username
     const handleChangeUsername = e => {
         const { name, value } = e.target;
         setUtilizadorSelecionado({
@@ -41,6 +42,7 @@ const NewAccount = () => {
         });
     }
 
+    // Função para lidar com a mudança no campo da password
     const handleChangePassword = e => {
         if (pass1.current.value === pass2.current.value) {
             setTxtErrorPassword("");
@@ -54,6 +56,7 @@ const NewAccount = () => {
 
     }
 
+    // Função para enviar uma requisição de criação de novo utilizador
     const pedidoPost = async () => {
         const formData = new FormData();
         formData.append("username", utilizadorSelecionado.username)
@@ -69,6 +72,7 @@ const NewAccount = () => {
         })
     }
 
+    // Função para resetar o formulário após a criação de um novo utilizador
     const resetForm = () => {
         setModalSucesso(false);
         pass1.current.value = '';

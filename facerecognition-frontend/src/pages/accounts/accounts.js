@@ -56,16 +56,19 @@ const Accounts = () => {
         { value: 'User', label: 'User', name: 'role' }
     ];
 
+    // Função para lidar com a seleção de um utiliador
     const selecionarUser = (user, opcao) => {
         setUserSelecionado(user);
         (opcao === "Editar") ?
             setModalEditar(true) : setModalApagar(true);
     }
 
+    // Função para lidar com a mudança no campo de pesquisa
     const handleChangeSearch = e => {
         setSearchText(e.target.value);
     }
 
+    // Função para lidar com a mudança nos campos de edição
     const handleChange = e => {
         const { name, value } = e.target;
         setUserSelecionado({
@@ -73,6 +76,7 @@ const Accounts = () => {
         });
     }
 
+    // Função para lidar com a mudança no campo de seleção
     const handleChangeSelect = e => {
         const { name, value } = e;
         setUserSelecionado({
@@ -80,6 +84,7 @@ const Accounts = () => {
         });
     }
 
+    // Função para lidar com erros de resposta da API
     const processError = useCallback((error) => {
         if (error.response && (error.response.status === 401)) {
             setModalLoginInvalido(true);
@@ -90,6 +95,7 @@ const Accounts = () => {
         }
     }, []);
 
+    // Função para obter os dados dos utilizadores
     const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl)
             .then(response => {
@@ -99,6 +105,7 @@ const Accounts = () => {
             })
     }, [processError, baseUrl])
 
+    // Função para enviar uma requisição de atualização dos dados de um utilizador
     const pedidoPut = async () => {
         const formData = new FormData();
         formData.append('username', userSelecionado.username);
@@ -114,6 +121,7 @@ const Accounts = () => {
             })
     }
 
+    // Função para enviar uma requisição de exclusão de um utilizador
     const pedidoDelete = async () => {
         await axios.delete(baseUrl + '/delete/' + userSelecionado.id)
             .then(response => {

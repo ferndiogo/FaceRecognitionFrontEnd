@@ -30,6 +30,7 @@ function Employees() {
         return plaintext;
     };
 
+    // Configuração do header do axios com o token de autenticação
     if (localStorage.getItem('token') != null) {
         axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
     }
@@ -58,6 +59,8 @@ function Employees() {
 
     const [searchText, setSearchText] = useState('');
     const [textModalLogin, setTextModalLogin] = useState('');
+
+    // Validações e estados de erro para entradas do formulário
 
     const [isValidName, setIsValidName] = useState(true);
     const [isBlankName, setIsBlankName] = useState(true);
@@ -106,6 +109,7 @@ function Employees() {
         { value: 'F', label: 'Feminino', name: 'sexo' }
     ];
 
+    // Função para selecionar um empregado e abrir o modal correspondente
     const selecionarEmpregado = (empregado, opcao) => {
         setEmpregadoSelecionado(empregado);
         if (opcao === "Editar") abrirFecharModalEditar();
@@ -149,6 +153,7 @@ function Employees() {
         window.location.reload(false);
     }
 
+    // Função para manipular as mudanças nos inputs do formulário de adição/editação
     const handleChange = e => {
         const { name, value } = e.target;
         setEmpregadoSelecionado({
@@ -233,11 +238,12 @@ function Employees() {
         setIsBlankData(isBlankInput);
     };
 
-
+    // Função para lidar com a mudança no campo de pesquisa
     const handleChangeSearch = e => {
         setSearchText(e.target.value);
     }
 
+     // Função para lidar com a mudança no campo de seleção
     const handleChangeSelect = e => {
         const { name, value } = e;
         setEmpregadoSelecionado({
@@ -250,6 +256,7 @@ function Employees() {
 
     }
 
+     // Função para lidar com a mudança de imagem
     const handleImagemChange = (event) => {
         setEmpregadoSelecionado({
             ...empregadoSelecionado, image: event.target.files[0]
@@ -268,6 +275,8 @@ function Employees() {
             setIsBlankImage(true);
         }
     };
+
+     // Funções para resetar os estados de validação e erros
 
     const resetBooleans = () => {
         setIsBlankName(true);
@@ -293,6 +302,7 @@ function Employees() {
         setIsBlankImage(false);
     }
 
+    // Função para processar erros nas chamadas da API
     const processError = useCallback((error) => {
         if (error.response && (error.response.status === 401)) {
             abrirFecharModalLoginInvalido();
@@ -303,6 +313,7 @@ function Employees() {
         }
     }, [abrirFecharModalLoginInvalido]);
 
+    // Chamada à API para obter as funções do utilizador
     const pedidoGetUserRole = useCallback(async () => {
         try {
             const response = await axios.get(baseUrlUser + "Roles");
@@ -312,6 +323,7 @@ function Employees() {
         }
     }, [baseUrlUser, setDataRole, processError]);
 
+    // Chamada à API para obter os empregados
     const pedidoGet = useCallback(async () => {
         try {
             const response = await axios.get(baseUrl);
@@ -321,6 +333,7 @@ function Employees() {
         }
     }, [baseUrl, setData, processError]);
 
+    // Chamada à API para adicionar um novo empregado
     const pedidoPost = async () => {
         const dataNasc = empregadoSelecionado.dataNasc;
         const dataNascimentoFormatada = moment(dataNasc, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -347,7 +360,7 @@ function Employees() {
         });
     }
 
-
+    // Chamada à API para editar um empregado existente
     const pedidoPut = async () => {
         const dataNasc = empregadoSelecionado.dataNasc;
         const dataNascimentoFormatada = moment(dataNasc, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -390,7 +403,7 @@ function Employees() {
             });
     }
 
-
+    // Chamada à API para apagar um empregado existente
     const pedidoDelete = async () => {
         await axios.delete(baseUrl + empregadoSelecionado.id)
             .then(response => {

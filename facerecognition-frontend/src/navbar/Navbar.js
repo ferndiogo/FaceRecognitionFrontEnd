@@ -6,7 +6,6 @@ import "./Button.css";
 import { navItems } from "./NavItems.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
-//import { faHouse, faPeopleGroup, faCircleInfo, faRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { url, encryptionKey } from '../config';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
@@ -84,6 +83,7 @@ function Navbar() {
 
   return (
     <div>
+      {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-logo">
           <FontAwesomeIcon icon={faExpand} />
@@ -91,6 +91,7 @@ function Navbar() {
         </div>
         {!mobile && (
           <ul className="nav-items">
+            {/* Renderiza os itens de navegação */}
             {navItems.map((item) => {
               if (item.role === '' || item.role === dataRole || dataRole === 'Admin') {
                 return (
@@ -105,6 +106,7 @@ function Navbar() {
                 return null;
               }
             })}
+             {/* Renderiza o botão de login/terminar sessão */}
             {(txtSessao === 'Iniciar Sessão') ? (
               <li className="nav-item">
                 <Link to="./Login">
@@ -126,6 +128,7 @@ function Navbar() {
         )}
         {!mobile}
 
+        {/* Icone para abrir/fechar a sidebar em dispositivos móveis */}
         {mobile && (
           <div className="sidebar-toggle">
             {sidebar ? (
@@ -143,8 +146,10 @@ function Navbar() {
         )}
       </nav>
 
+      {/* Sidebar */}
       <div className={sidebar ? "sidebar active" : "sidebar"}>
         <ul className="sidebar-items">
+          {/* Renderiza os itens de navegação na sidebar */}
           {navItems.map((item) => {
             if (item.role === '' || item.role === dataRole || dataRole === 'Admin') {
               return (
@@ -163,6 +168,7 @@ function Navbar() {
               return null;
             }
           })}
+          {/* Renderiza o botão de login/terminar sessão na sidebar */}
           {(txtSessao === 'Iniciar Sessão') ? (
               <li className="sidebar-item">
                 <Link to="./Login">
@@ -183,6 +189,7 @@ function Navbar() {
         </ul>
       </div>
 
+       {/* Modal para terminar sessão */}
       <Modal isOpen={modalTerminarSessao}>
         <ModalHeader>Terminar Sessão</ModalHeader>
         <ModalBody>Tem a certeza que deseja terminar sessão?</ModalBody>

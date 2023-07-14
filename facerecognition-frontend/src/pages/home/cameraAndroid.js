@@ -17,6 +17,7 @@ function Camera() {
     return plaintext;
   };
 
+  // Configuração do header do axios com o token de autenticação
   if(localStorage.getItem('token') != null) {
     axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
   }
@@ -66,12 +67,16 @@ function Camera() {
     setModalAdicionado(!modalAdicionado);
   };
 
+  // Função responsável por enviar a imagem capturada para a API.
   const enviarImagem = async () => {
     if (capturedImage) {
+      // Obter a extensão do arquivo da imagem capturada
       const fileExtension = capturedImage.substring(capturedImage.lastIndexOf('.') + 1).toLowerCase();
       const allowedExtensions = ['png', 'jpeg', 'jpg'];
 
       if (allowedExtensions.includes(fileExtension)) {
+
+        // Caso a extensão esteja na lista de extensões permitidas, envia a imagem diretamente como um arquivo
 
         const formData = new FormData();
         formData.append('img', capturedImage);
@@ -87,6 +92,8 @@ function Camera() {
           setModalErro(true);
         }
       } else {
+
+        // Caso a extensão não esteja na lista de extensões permitidas, converte a imagem em um blob e envia como um arquivo
 
         const formData = new FormData();
         const canvas = document.createElement('canvas');
@@ -112,7 +119,7 @@ function Camera() {
                 setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
                 setModalErro(true);
               });
-          }, 'image/jpeg', 0.7); // Defina a qualidade desejada (0.7 neste exemplo)
+          }, 'image/jpeg', 0.7); // Define a qualidade desejada (0.7 neste exemplo)
         };
         img.src = capturedImage;
       }

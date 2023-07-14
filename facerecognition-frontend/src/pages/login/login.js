@@ -22,6 +22,7 @@ const Login = () => {
         }
     )
 
+    // Função é responsável por atualizar com os valores inseridos nos campos de input do formulário.
     const handleChange = e => {
         const { name, value } = e.target;
         setUtilizadorSelecionado({
@@ -35,6 +36,8 @@ const Login = () => {
         return ciphertext;
     };
 
+
+    // Função responsável por enviar uma solicitação de login para a API.
     const pedidoPost = async () => {
         delete utilizadorSelecionado.id;
         const formData = new FormData();

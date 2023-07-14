@@ -14,6 +14,7 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
         return registo.type === 'E' ? 'Entrada' : 'Saída';
     }
 
+    // Função responsável por extrair os componentes de data e hora de uma string de data e hora e retorná-la em um formato específico.
     function extrairDataHora(dateTimeString) {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
@@ -27,6 +28,8 @@ function TableRegistos({ selecionarRegisto, registos, search, role }) {
         return formattedDate;
     }
 
+    // Se não houver valor de pesquisa, o código renderiza todos os registros na tabela. 
+    // Se houver um valor de pesquisa, o código filtra os registros com base na data.
     if (search == null) {
         return (
             registos.map(registo => (

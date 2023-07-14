@@ -18,6 +18,7 @@ function Camera() {
     return plaintext;
   };
 
+  // Configuração do header do axios com o token de autenticação
   if(localStorage.getItem('token') != null) {
     axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
   }
@@ -60,51 +61,60 @@ function Camera() {
     setModalAdicionado(!modalAdicionado);
   }
 
+  // Função esponsável por enviar a imagem capturada para a API.
   const enviarImagem = async () => {
     if (capturedImage) {
+      // Obtém a extensão do arquivo da imagem capturada
       const fileExtension = capturedImage.substring(capturedImage.lastIndexOf('.') + 1).toLowerCase();
       const allowedExtensions = ['png', 'jpeg', 'jpg'];
 
       if (allowedExtensions.includes(fileExtension)) {
 
+        // Se a extensão estiver na lista de extensões permitidas, envia a imagem diretamente
         const formData = new FormData();
         formData.append("img", capturedImage);
 
         try {
+          // Envia a imagem para o servidor usando uma requisição POST
           const response = await axios.post(baseUrl, formData);
           setEmployeeName(response.data[0].employee.name);
           closeModal();
           abrirFecharModalAdicionado();
         } catch (error) {
+          // Em caso de erro, fecha o modal e exibe uma mensagem de erro
           closeModal();
           setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
           setModalErro(true);
         }
       } else {
-
+        // Se a extensão não estiver na lista de extensões permitidas, converte a imagem para PNG antes de enviar
         const convertedImage = await convertToPng(capturedImage);
 
         const formData = new FormData();
         formData.append("img", convertedImage, "captured_image.png");
 
         try {
+          // Envia a imagem convertida para o servidor usando uma requisição POST
           const response = await axios.post(baseUrl, formData);
           setEmployeeName(response.data[0].employee.name);
           closeModal();
           abrirFecharModalAdicionado();
         } catch (error) {
+          // Em caso de erro, fecha o modal e exibe uma mensagem de erro
           closeModal();
           setTxtModalErro("Ocorreu um erro ao identificar o rosto!");
           setModalErro(true);
         }
       }
     } else {
+      // Se não houver imagem capturada, fecha o modal e exibe uma mensagem de erro
       closeModal();
       setTxtModalErro("Ocorreu um erro ao capturar imagem!");
       setModalErro(true);
     }
   };
 
+  // Função responsável por converter uma imagem para o formato PNG
   const convertToPng = async (imageData) => {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');

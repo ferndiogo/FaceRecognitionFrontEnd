@@ -81,6 +81,7 @@ function Registries() {
         { value: 'S', label: 'Saída', name: 'type' }
     ];
 
+    // Função responsável por selecionar um registro e abrir o modal correspondente para editar ou apagar o registro.
     const selecionarRegisto = (registo, opcao) => {
         setRegistoSelecionado(registo);
         if (opcao === "Editar") {
@@ -126,6 +127,7 @@ function Registries() {
         setModalLoginInvalido(!modalLoginInvalido);
     }, [setModalLoginInvalido, modalLoginInvalido]);
 
+    // Função responsável por atualizar o estado do registro selecionado com base nas alterações feitas em um campo de entrada. 
     const handleChange = e => {
         const { name, value } = e.target;
         setRegistoSelecionado({
@@ -133,6 +135,7 @@ function Registries() {
         });
     }
 
+    // Função para lidar com a mudança no campo de pesquisa
     const handleChangeSearch = e => {
         if (e.target.value !== "") {
             setSearchText(new Date(e.target.value));
@@ -141,6 +144,7 @@ function Registries() {
         }
     }
 
+     // Função para lidar com a mudança no campo de seleção
     const handleChangeSelect = e => {
         const { name, value } = e;
         setRegistoSelecionado({
@@ -151,6 +155,7 @@ function Registries() {
         setIsBlankEntraSai(isBlankInput);
     }
 
+     // Função para lidar com a mudança no campo de data
     const handleChangeData = (event) => {
         if (modalAdicionar) {
             setRegistoSelecionado({
@@ -173,6 +178,7 @@ function Registries() {
         setIsBlankData(isBlankInput);
     };
 
+     // Função para lidar com a mudança no campo de hora
     const handleChangeHora = (event) => {
         if (modalAdicionar) {
             setRegistoSelecionado({
@@ -195,6 +201,7 @@ function Registries() {
         setIsBlankHora(isBlankInput);
     };
 
+    // Função para lidar com erros de resposta da API
     const processError = useCallback((error) => {
         if (error.response && (error.response.status === 401)) {
             abrirFecharModalLoginInvalido();
@@ -205,6 +212,7 @@ function Registries() {
         }
     }, [abrirFecharModalLoginInvalido]);
 
+    // Chamada à API para obter as funções do utilizador
     const pedidoGetUserRole = useCallback(async () => {
         try {
             const response = await axios.get(baseUrlUser + "Roles");
@@ -214,6 +222,7 @@ function Registries() {
         }
     }, [baseUrlUser, setDataRole, processError]);
 
+    // Chamada à API para obter os empregados
     const pedidoGetEmp = useCallback(async () => {
         await axios.get(baseUrlEmp + idEmp)
             .then(response => {
@@ -224,6 +233,7 @@ function Registries() {
     }, [idEmp, processError, baseUrlEmp])
 
 
+    // Chamada à API para obter os registos de um funcionário
     const pedidoGet = useCallback(async () => {
         await axios.get(baseUrl + "employee/" + idEmp)
             .then(response => {
@@ -233,6 +243,7 @@ function Registries() {
             })
     }, [idEmp, processError, baseUrl])
 
+    // Chamada à API para adicionar um novo registo
     const pedidoPost = async () => {
         delete registoSelecionado.id;
         const formData = new FormData();
@@ -250,6 +261,7 @@ function Registries() {
             })
     }
 
+    // Chamada à API para editar um registo
     const pedidoPut = async () => {
         const formData = new FormData();
         formData.append('id', registoSelecionado.id)
@@ -277,6 +289,7 @@ function Registries() {
             })
     }
 
+    // Chamada à API para excluir um registo empregado
     const pedidoDelete = async () => {
         await axios.delete(baseUrl + registoSelecionado.id)
             .then(response => {
@@ -289,6 +302,7 @@ function Registries() {
             })
     }
 
+    // Função responsável por extrair os componentes de data e hora de uma string de data e hora e retorná-la em um formato específico.
     const extrairDataHora = (dateTimeString) => {
         const dateObj = new Date(dateTimeString);
         const year = dateObj.getFullYear();
@@ -301,6 +315,10 @@ function Registries() {
         const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         return formattedDate;
     }
+
+
+    //funções responsáveis por redefinir os valores dos booleanos relacionados à validação de dados e campos em formulários.
+
 
     const resetBooleansAdd = () => {
         setIsValidData(true);
@@ -318,6 +336,7 @@ function Registries() {
         setIsBlankEntraSai(false);
     }
 
+    // Função responsável por extrair a parte da data ou hora da propriedade dateTime do registro selecionado.
     const dataHora = (str) => {
         const aux = new Date(registoSelecionado.dateTime);
         const dia = aux.getDate();

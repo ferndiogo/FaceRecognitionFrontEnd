@@ -12,6 +12,7 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function Cards({ empregados, search, selecionarEmpregado }) {
+    // Renderização dos cards de empregados
     if (search === "") {
         return (
             empregados.map(empregado => (
@@ -60,7 +61,7 @@ function Cards({ empregados, search, selecionarEmpregado }) {
                         </Card>
                     );
                 } else {
-                    return null; // Retorne null se o empregado não corresponder à pesquisa
+                    return null; // Retorna null se o empregado não corresponder à pesquisa
                 }
             })
         );
