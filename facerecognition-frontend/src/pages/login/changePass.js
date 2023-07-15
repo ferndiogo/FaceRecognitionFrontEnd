@@ -45,9 +45,10 @@ const ChangePass = () => {
         axios.defaults.headers.common['Authorization'] = decryptString(localStorage.getItem('token'));
     }
 
+    // Função responsável por enviar a nova password para a API.
     const pedidoPost = async () => {
         const formData = new FormData();
-        formData.append("password", passSelecionado.password)
+        formData.append("password", passSelecionado)
         axios.post(baseUrl, formData, {
             headers: {
                 'Content-Type': 'text/plain'
@@ -59,6 +60,7 @@ const ChangePass = () => {
         })
     }
 
+    // Função para processar erros nas chamadas da API
     const processError = useCallback((error) => {
         if (error.response && (error.response.status === 401)) {
             setModalLoginInvalido(true);
@@ -69,6 +71,7 @@ const ChangePass = () => {
         }
     }, []);
 
+    // Função para ir buscar o nome do utilizador
     const pedidoGet = useCallback(async () => {
         await axios.get(url + "Auth/Username")
             .then(response => {
@@ -107,7 +110,7 @@ const ChangePass = () => {
             <Modal isOpen={modalSucesso}>
                 <ModalBody>Palavra Passe alterada com sucesso!</ModalBody>
                 <ModalFooter>
-                    <Link to="../login"><button className="btnDanger">Iniciar Sessão</button></Link>
+                    <button onClick={() => { localStorage.setItem('token', ''); window.location.reload(false); }} style={{ border: "transparent", backgroundColor: "transparent" }} ><Link to="../login" className="btnDanger">Iniciar Sessão</Link></button>
                 </ModalFooter>
             </Modal>
 

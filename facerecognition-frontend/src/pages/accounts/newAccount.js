@@ -80,7 +80,7 @@ const NewAccount = () => {
         username.current.value = '';
         setTxtErrorPassword('');
         setTxtErrorUsername('');
-        window.location.href = '/Accounts';
+        window.location.href = '/#/Accounts';
     }
 
     return (
