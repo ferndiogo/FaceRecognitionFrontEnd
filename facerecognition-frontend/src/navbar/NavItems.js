@@ -45,7 +45,7 @@ export const navItems = [
     nName: "nav-item",
     sName: "sidebar-item",
     icon: <FontAwesomeIcon icon={faKey} />,
-    role: 'Admin'
+    role: 'User'
   }
   
 ];
